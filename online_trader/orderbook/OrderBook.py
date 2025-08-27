@@ -18,8 +18,9 @@ from longport.openapi import (
 from decimal import Decimal
 from typing import Dict, Protocol, Type
 from log import logger
+from config import config
 import time
-from LongPortData import LongPortData
+from dataloader.LongPortOnline import dataset
 
 
 class Borg:
@@ -30,7 +31,7 @@ class Borg:
 
 
 class OrderBook(Borg):
-    def __init__(self, stock_id: str, config) -> None:
+    def __init__(self) -> None:
         if self._shared_state:
             # 如果已经有实例存在，则直接返回
             super().__init__()
@@ -39,12 +40,12 @@ class OrderBook(Borg):
             print("Initialize the order book with empty lists for bids and asks.")
             super().__init__()
             self.order_book = {}
-            self.stock_id = stock_id
-            self.data = LongPortData(config)
+            self.stock_id = config["stock_id"]
+            self.data = dataset
             self.trade_ctx = self.data.trade_ctx
             self.quote_ctx = self.data.quote_ctx
             resp = self.trade_ctx.today_orders(
-                symbol=stock_id,
+                symbol=self.stock_id,
             )
             for order in resp:
                 if (
@@ -160,3 +161,6 @@ class OrderBook(Borg):
             order_id = self.submit_order(stock_id, price, amount, order_side)
 
         return order_id
+
+
+oder_book = OrderBook()

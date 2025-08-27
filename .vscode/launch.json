@@ -17,6 +17,13 @@
             "request": "launch",
             "program": "test.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "main",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "console": "integratedTerminal"
         }
     ]
 }

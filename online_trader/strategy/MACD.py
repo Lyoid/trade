@@ -1,10 +1,14 @@
 from datetime import datetime
 from longport.openapi import OrderStatus
 import time
-from LongPortData import LongPortData
-from .TraderStrategy import TraderStrategy
+from dataloader.LongPortOnline import LongPortOnline
+from factor.MACDFactor import MACDFactor
+from online_trader.strategy.TraderStrategy import TraderStrategy
 from log import logger
-from orderbook.OrderBook import OrderBook
+from online_trader.orderbook.OrderBook import OrderBook
+from config import config
+from tools.TimeCheck import TimeCheck
+
 from longport.openapi import (
     QuoteContext,
     Config,
@@ -25,68 +29,74 @@ from longport.openapi import (
 class MACD(TraderStrategy):
     """A base class for trader strategies."""
 
-    def __init__(self, stock_id: str, config) -> None:
-        super().__init__(stock_id=stock_id, cfg=config)
+    def __init__(self) -> None:
+        super().__init__()
         self.period_1 = config["strategy"]["period_1"]
         self.period_2 = config["strategy"]["period_2"]
         self.amount = config["strategy"]["amount"]
+        self.stock_id = config["stock_id"]
+
+        self.market = self.stock_id.split(".")[1]
+        if self.market == "HK":
+            self.current_time = TimeCheck.get_beijing_time()
+        elif self.market == "US":
+            self.current_time = TimeCheck.get_us_time()
 
         global data
         global order_book
         global last_order
         # 初始化数据类
-        data = LongPortData(config)
-        order_book = OrderBook(stock_id, config)
+        data = LongPortOnline()
+        order_book = OrderBook()
+        self.init_strategy()
+
+    def init_strategy(self) -> None:
         last_order = ""
-        self.candlesticks = data.get_history_candlesticks(stock_id)
+        self.candlesticks = data.get_history_candlesticks(self.stock_id)
         self.current_price = data.get_current_price([self.stock_id])
+        self.macd_factor = MACDFactor(
+            stock_id=self.stock_id, hist_candlesticks=self.candlesticks
+        )
 
     def Run(self) -> None:
         # 暂停程序执行一天
-        time.sleep(86400)
 
         logger.info("Start macd strategy")
         # 更新数据
+        if self.market == "US":
+            is_next_day = TimeCheck.check_next_day(
+                self.current_time, TimeCheck.get_us_time()
+            )
+            self.current_time = TimeCheck.get_us_time()
+        elif self.market == "HK":
+            is_next_day = TimeCheck.check_next_day(
+                self.current_time, TimeCheck.get_us_time()
+            )
+            self.current_time = TimeCheck.get_beijing_time()
+
+        if is_next_day:
+            logger.info("New day, re-initialize strategy")
+            self.init_strategy()
+
         data.update_info()
-
-        # 计算MACD指标
-        # 计算所有30日均线和50日均线
-        closes = [candle.close for candle in self.candlesticks]
-
-        ma_30_list = []
-        ma_50_list = []
-        if len(closes) >= self.period_2:
-            for i in range(self.period_2 - 1, len(closes)):
-                ma_30 = sum(closes[i - self.period_1 + 1 : i + 1]) / self.period_1
-                ma_50 = sum(closes[i - self.period_2 + 1 : i + 1]) / self.period_2
-                ma_30_list.append(ma_30)
-                ma_50_list.append(ma_50)
-        else:
-            ma_30_list = []
-            ma_50_list = []
-
-        # 判断金叉（短期均线上穿长期均线）和死叉（短期均线下穿长期均线）
-        golden_cross = False
-        death_cross = False
-        if len(ma_30_list) >= 2 and len(ma_50_list) >= 2:
-            # 前一时刻短期均线在下，当前时刻上穿
-            if ma_30_list[-2] < ma_50_list[-2] and ma_30_list[-1] > ma_50_list[-1]:
-                golden_cross = True
-            # 前一时刻短期均线在上，当前时刻下穿
-            elif ma_30_list[-2] > ma_50_list[-2] and ma_30_list[-1] < ma_50_list[-1]:
-                death_cross = True
-
         self.current_price = data.get_current_price([self.stock_id])
-        logger.info(f"Current price: {self.current_price}")
-        # 金叉
-        if golden_cross:
-            logger.info("Golden cross detected, placing buy order")
-            return self.current_price, self.amount, OrderSide.Buy
 
-        # 死叉
-        elif death_cross:
-            logger.info("Death cross detected, placing sell order")
-            return self.current_price, self.amount, OrderSide.Sell
+        # Check if we are in the market
+        # 入场条件
+        candle = type(
+            "Candle",
+            (object,),
+            {"open": self.current_price[0], "close": self.current_price[0]},
+        )()
 
-        logger.info("Nothing to do, waiting for next cycle")
-        return self.current_price, self.amount, None
+        result = self.macd_factor.check(candle)
+
+        if result == 1:
+            logger.info("macd buy")
+
+        elif result == 2:
+            logger.info("macd sell")
+
+        self.macd_factor.delete_last_candlestick()
+
+        return (self.current_price, self.amount, result)

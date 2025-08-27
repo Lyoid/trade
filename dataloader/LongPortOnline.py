@@ -18,7 +18,9 @@ import pandas as pd
 from decimal import Decimal
 import time
 from log import logger
+from config import config
 from typing import Dict
+from tools.TimeCheck import TimeCheck
 
 
 class Borg:
@@ -28,13 +30,13 @@ class Borg:
         self.__dict__ = self._shared_state
 
 
-class LongPortData(Borg):
-    def __init__(self, config) -> None:
+class LongPortOnline(Borg):
+    def __init__(self) -> None:
         if self._shared_state:
             # 如果已经有实例存在，则直接返回
             super().__init__()
             print(
-                '"LongPortData" instance already exists, returning existing instance.'
+                '"LongPortOnline" instance already exists, returning existing instance.'
             )
         else:
             # 如果没有实例存在，则初始化
@@ -59,6 +61,7 @@ class LongPortData(Borg):
             self.market_during_time = None
 
             # 市场时间
+            # 9:30-16:00​​
             self.market_time = {
                 "US": {
                     "pre_market_quote": {
@@ -92,8 +95,8 @@ class LongPortData(Borg):
             self.history_candlesticks = None
             self.candlestick_amount = config["longport"]["candlestick_amount"]
 
-            logger.info(self.account_balance)
-            logger.info(self.stock_positions)
+            # logger.info(self.account_balance)
+            # logger.info(self.stock_positions)
 
     def get_last_trade_price(self, start_date, stock_id):
         # 先找当日成交记录
@@ -119,17 +122,34 @@ class LongPortData(Borg):
     def get_current_price(self, stock_id):
         # resp = ctx.quote(["700.HK", "AAPL.US", "TSLA.US", "NFLX.US"])
         resp = self.quote_ctx.quote(stock_id)
-
         logger.info(resp)
 
-        if self.market_during_time == "on":
-            return resp[0].last_done
-        elif self.market_during_time == "on_market":
-            return resp[0].last_done
-        elif self.market_during_time == "pre_market_quote":
-            return resp[0].pre_market_quote.last_done
-        elif self.market_during_time == "post_market_quote":
-            return resp[0].post_market_quote.last_done
+        # 检查市场
+        market = []
+        for name in stock_id:
+            market.append(name.split(".")[1])
+
+        # 返回价格
+        prices = []
+        is_beijing_market, is_us_market = self.check_market()
+        for index, item in enumerate(resp):
+            logger.info(f"Current price for {item.symbol}: {item.last_done}")
+            if market[index] == "HK":
+                if is_beijing_market:
+                    prices.append(item.last_done)
+                else:
+                    prices.append(item.last_done)
+            elif market[index] == "US":
+                if is_us_market == "on_market":
+                    prices.append(item.last_done)
+                elif is_us_market == "pre_market_quote":
+                    prices.append(item.pre_market_quote.last_done)
+                elif is_us_market == "post_market_quote":
+                    prices.append(item.post_market_quote.last_done)
+                else:
+                    prices.append(item.last_done)
+
+        return prices
 
     def check_stock_positions(self, stock_id):
         self.stock_positions = self.trade_ctx.stock_positions()
@@ -143,7 +163,36 @@ class LongPortData(Borg):
 
         return False
 
-    def check_market(self, stock_id):
+    def check_market(self):
+
+        # 9:30-16:00​​
+        beijing_time = TimeCheck.get_beijing_time()
+        us_time = TimeCheck.get_us_time()
+        # 判断北京时间是否在9:30-16:00之间
+        start = "09:30:00"
+        end = "16:00:00"
+        beijing_time_str = beijing_time.strftime("%H:%M:%S")
+        is_beijing_market = start <= beijing_time_str <= end
+
+        # logger.info(
+        #     f"beijing_time: {beijing_time_str}, is_beijing_market: {is_beijing_market}"
+        # )
+
+        # 判断美国时间是在盘前还是盘后
+        us_time_str = us_time.strftime("%H:%M:%S")
+        if us_time_str < "09:30:00":
+            # logger.info("当前为美股盘前时段")
+            is_us_market = "pre_market_quote"
+        elif us_time_str > "16:00:00":
+            # logger.info("当前为美股盘后时段")
+            is_us_market = "post_market_quote"
+        else:
+            # logger.info("当前为美股盘中时段")
+            is_us_market = "on_market"
+
+        return is_beijing_market, is_us_market
+
+    def is_trading(self, stock_id):
         # 补充 symbol_name
         resp = self.quote_ctx.static_info([stock_id])
         # self.symbol_name = resp[0].name_en
@@ -153,61 +202,30 @@ class LongPortData(Borg):
         market = stock_id.split(".")[1]
         logger.info(f"market: {market}")
 
-        self.market = market
-        # 获取当前时间
-        currentDateAndTime = datetime.now()
-
-        logger.info(f"The current date and time is {currentDateAndTime}")
-
-        # Output: The current date and time is 2022-03-19 10:05:39.482383
-
-        currentTime = (currentDateAndTime + timedelta(hours=8)).strftime("%H:%M:%S")
-        logger.info(f"currentTime {currentTime}")
-
-        # 判断当前时间是否在交易时间内
-        is_market_time = False
-        for index, during_time in enumerate(self.market_time[self.market]):
-            logger.info(f"during_time {during_time}")
-            logger.info(
-                f"during_time begin {self.market_time[market][during_time]['begin']}"
-            )
-            logger.info(
-                f"during_time end {self.market_time[market][during_time]['end']}"
-            )
-
-            if during_time == "on_market":
-                if (
-                    self.market_time[market][during_time]["begin"] < currentTime
-                    and currentTime < "24:00:00"
-                ):
-                    logger.info(f"Market is in {during_time}")
-                    is_market_time = True
-                    break
-
-                elif (
-                    "00:00:00" < currentTime
-                    and currentTime < self.market_time[market][during_time]["end"]
-                ):
-                    logger.info(f"Market is in {during_time}")
-                    is_market_time = True
-                    break
-
-            if (
-                self.market_time[market][during_time]["begin"] <= currentTime
-                and currentTime <= self.market_time[market][during_time]["end"]
-            ):
-                logger.info(f"Market is in {during_time}")
-
-                is_market_time = True
-                break
-
-        if not is_market_time:
-            self.market_during_time = None
-            logger.info(f"Market is not in {during_time}")
-            return False
+        is_beijing_market, is_us_market = self.check_market()
+        if market == "HK":
+            if is_beijing_market:
+                logger.info("当前为港股交易时间")
+                return True
+            else:
+                logger.info("当前为非港股交易时间")
+                return False
+        elif market == "US":
+            if is_us_market == "on_market":
+                logger.info("当前为美股交易时间")
+                return True
+            elif is_us_market == "pre_market_quote":
+                logger.info("当前为美股盘前交易时间")
+                return True
+            elif is_us_market == "post_market_quote":
+                logger.info("当前为美股盘后交易时间")
+                return True
+            else:
+                logger.info("当前为非美股交易时间")
+                return False
         else:
-            self.market_during_time = during_time
-            return True
+            logger.info("未知市场")
+            return False
 
     # 查看当前账户信息
     def get_account_balance(self):
@@ -261,3 +279,6 @@ class LongPortData(Borg):
         # self.check_market(stock_id)
         # logger.info(f"Market: {self.market}")
         # logger.info(f"Market during time: {self.market_during_time}")
+
+
+dataset = LongPortOnline()

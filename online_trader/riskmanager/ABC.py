@@ -1,7 +1,7 @@
 from datetime import datetime
 from longport.openapi import OrderStatus
 import time
-from LongPortData import LongPortData
+from dataloader.LongPortOnline import LongPortOnline
 from log import logger
 from orderbook.OrderBook import OrderBook
 from longport.openapi import (
@@ -26,7 +26,7 @@ class RiskManager:
 
     def __init__(self, config) -> None:
         self.config = config
-        self.data = LongPortData(config)
+        self.data = LongPortOnline(config)
         logger.info(f"RiskManager initialized")
 
     def Run(self) -> None:

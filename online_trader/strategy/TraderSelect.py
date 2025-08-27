@@ -1,6 +1,6 @@
-from .TraderStrategy import TraderStrategy
-from .NetTrader import NetTrader
-from .MACD import MACD
+from online_trader.strategy.TraderStrategy import TraderStrategy
+from online_trader.strategy.NetTrader import NetTrader
+from online_trader.strategy.MACD import MACD
 from typing import Dict, Protocol, Type
 
 
