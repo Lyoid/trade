@@ -90,13 +90,15 @@ class MACD(TraderStrategy):
         )()
 
         result = self.macd_factor.check(candle)
-
+        order_side = None
         if result == 1:
             logger.info("macd buy")
+            order_side = OrderSide.Buy
 
         elif result == 2:
             logger.info("macd sell")
+            order_side = OrderSide.Sell
 
         self.macd_factor.delete_last_candlestick()
 
-        return (self.current_price, self.amount, result)
+        return self.current_price, self.amount, order_side

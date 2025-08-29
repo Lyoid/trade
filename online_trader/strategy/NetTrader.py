@@ -49,11 +49,14 @@ class NetTrader(TraderStrategy):
     def Run(self) -> None:
         logger.info("Run NetTrader Strategy")
         # 查看仓位 空仓则下单
-        if not data.check_stock_positions(self.stock_id):
+        if data.check_stock_positions(self.stock_id) == 0:
             logger.info("not have stock position create order")
             current_price = data.get_current_price([self.stock_id])
             self.last_trader_price = current_price[0]
             return current_price[0], self.amount, OrderSide.Buy
+        elif data.check_stock_positions(self.stock_id) == 2:
+            logger.info("have stock position do nothing")
+            return None, None, None
 
         # 开始网格交易
         logger.info("Start NetTrade")

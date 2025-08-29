@@ -1,5 +1,5 @@
-log_path: /e-vepfs/wangchenan/code/trade/LOG
-log_name: xiaomi
+log_path: /home/code/trade/log
+log_name: test
 longport:
   app_key: fddd1f64ad477d0aea79928c749cc581
   app_secret: d7873d6e17dbff6c0f1bb6ccf3f5a638f044ee9b6ba7f87e92399c8e8164357e
@@ -25,20 +25,14 @@ risk_management:
 stock_id: "MSTZ.US"
 # stock_id: 01810.HK
 
-# strategy: 
-#   name: NetTrader
-#   first_amount: 1200
-#   amount: 50
-#   delta_price: 0.5
-
 strategy: 
-  name: MACD
-  period_1: 30
-  period_2: 50
-  amount: 600
+  name: NetTrader
+  first_amount: 1200
+  amount: 50
+  delta_price: 0.5
 
-factor: 
-  name: MACDfactor
-  period_1: 30
-  period_2: 50
-  amount: 600
+# strategy: 
+#   name: MACD
+#   period_1: 30
+#   period_2: 50
+#   amount: 600

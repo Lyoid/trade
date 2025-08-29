@@ -3,20 +3,12 @@ import time
 from dataloader.LongPortOnline import LongPortOnline
 import sys
 from log import logger
-import yaml
 from online_trader.strategy.TraderSelect import SelectStrategy
 from online_trader.orderbook.OrderBook import OrderBook
+from config import config
+
 
 if __name__ == "__main__":
-
-    # 读取yaml配置文件
-    config_path = "/e-vepfs/wangchenan/code/trade/config.yaml"
-    with open(config_path, "r", encoding="utf-8") as f:
-        config = yaml.safe_load(f)
-    print("读取到的配置:", config)
-
-    logger(config["log_name"], config["log_path"])
-    logger.info("Started")
 
     # 配置
     stock_id = config["stock_id"]

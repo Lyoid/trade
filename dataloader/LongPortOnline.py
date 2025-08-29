@@ -99,25 +99,32 @@ class LongPortOnline(Borg):
             # logger.info(self.stock_positions)
 
     def get_last_trade_price(self, start_date, stock_id):
-        # 先找当日成交记录
-        resp = self.trade_ctx.today_executions(symbol=stock_id)
-        if resp:
-            last_trader_price = resp[len(resp) - 1].price
-            return last_trader_price
+        while True:
+            # 先找当日成交记录
+            try:
+                resp = self.trade_ctx.today_executions(symbol=stock_id)
+                if resp:
+                    last_trader_price = resp[len(resp) - 1].price
+                    return last_trader_price
 
-        # 再找历史成交记录
-        resp = self.trade_ctx.history_executions(
-            # symbol = "700.HK",
-            symbol=stock_id,
-            # start_at = datetime(2022, 5, 9),
-            start_at=start_date,
-            end_at=datetime.today(),
-        )
-        if resp:
-            last_trader_price = resp[len(resp) - 1].price
-            return last_trader_price
+                # 再找历史成交记录
+                resp = self.trade_ctx.history_executions(
+                    # symbol = "700.HK",
+                    symbol=stock_id,
+                    # start_at = datetime(2022, 5, 9),
+                    start_at=start_date,
+                    end_at=datetime.today(),
+                )
+                if resp:
+                    last_trader_price = resp[len(resp) - 1].price
+                    return last_trader_price
 
-        return Decimal(0.0)
+                return Decimal(0.0)
+
+            except Exception as e:
+                logger.error(f"Failed to fetch stock positions: {e}")
+                sleep(2)
+                continue
 
     def get_current_price(self, stock_id):
         # resp = ctx.quote(["700.HK", "AAPL.US", "TSLA.US", "NFLX.US"])
@@ -152,16 +159,22 @@ class LongPortOnline(Borg):
         return prices
 
     def check_stock_positions(self, stock_id):
-        self.stock_positions = self.trade_ctx.stock_positions()
+        while True:
+            try:
+                self.stock_positions = self.trade_ctx.stock_positions()
+            except Exception as e:
+                logger.error(f"Failed to fetch stock positions: {e}")
+                sleep(2)
+                continue
 
-        logger.info(self.stock_positions)
-        # 有坑，symbol 前面是不带0的
-        for stock_position in self.stock_positions.channels[0].positions:
-            if stock_position.symbol in stock_id:
-                if stock_position.quantity > 0:
-                    return True
+            logger.info(self.stock_positions)
+            # 有坑，symbol 前面是不带0的
+            for stock_position in self.stock_positions.channels[0].positions:
+                if stock_position.symbol in stock_id:
+                    if stock_position.quantity > 0:
+                        return True
 
-        return False
+            return False
 
     def check_market(self):
 
@@ -264,11 +277,14 @@ class LongPortOnline(Borg):
         #     logger.info(f"No change current price for {stock_id}")
 
         # 账户信息
-        self.account_balance = self.trade_ctx.account_balance()
-        logger.info(f"Account balance: {self.account_balance}")
-        # 持仓信息
-        self.stock_positions = self.trade_ctx.stock_positions()
-        logger.info(f"Stock positions: {self.stock_positions}")
+        try:
+            self.account_balance = self.trade_ctx.account_balance()
+            logger.info(f"Account balance: {self.account_balance}")
+            # 持仓信息
+            self.stock_positions = self.trade_ctx.stock_positions()
+            logger.info(f"Stock positions: {self.stock_positions}")
+        except Exception as e:
+            logger.error(f"Failed to fetch account balance: {e}")
 
         # # 历史烛图
         # self.history_candlesticks = self.get_history_candlesticks(stock_id)
