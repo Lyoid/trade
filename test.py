@@ -30,9 +30,6 @@ from strategy.TraderSelect import SelectStrategy
 
 
 if __name__ == "__main__":
-    # log初始化
-    logger(config["log_name"], config["log_path"])
-    logger.info("Started")
 
     # Add DataSet
     # dataset = TushareData(isplot=True)

@@ -139,6 +139,9 @@ class LongPortOnline(Borg):
         # 返回价格
         prices = []
         is_beijing_market, is_us_market = self.check_market()
+        logger.info(
+            f"is_beijing_market: {is_beijing_market}, is_us_market: {is_us_market}"
+        )
         for index, item in enumerate(resp):
             logger.info(f"Current price for {item.symbol}: {item.last_done}")
             if market[index] == "HK":
@@ -150,6 +153,7 @@ class LongPortOnline(Borg):
                 if is_us_market == "on_market":
                     prices.append(item.last_done)
                 elif is_us_market == "pre_market_quote":
+                    logger.info(f"pre_market_quote: {item.pre_market_quote}")
                     prices.append(item.pre_market_quote.last_done)
                 elif is_us_market == "post_market_quote":
                     prices.append(item.post_market_quote.last_done)
@@ -193,14 +197,15 @@ class LongPortOnline(Borg):
 
         # 判断美国时间是在盘前还是盘后
         us_time_str = us_time.strftime("%H:%M:%S")
+        logger.info(f"us_time: {us_time_str}")
         if us_time_str < "09:30:00":
-            # logger.info("当前为美股盘前时段")
+            logger.info("当前为美股盘前时段")
             is_us_market = "pre_market_quote"
         elif us_time_str > "16:00:00":
-            # logger.info("当前为美股盘后时段")
+            logger.info("当前为美股盘后时段")
             is_us_market = "post_market_quote"
         else:
-            # logger.info("当前为美股盘中时段")
+            logger.info("当前为美股盘中时段")
             is_us_market = "on_market"
 
         return is_beijing_market, is_us_market
@@ -229,7 +234,8 @@ class LongPortOnline(Borg):
                 return True
             elif is_us_market == "pre_market_quote":
                 logger.info("当前为美股盘前交易时间")
-                return True
+                logger.info("盘前市场没有访问权限,价格会返回0")
+                return False
             elif is_us_market == "post_market_quote":
                 logger.info("当前为美股盘后交易时间")
                 return True

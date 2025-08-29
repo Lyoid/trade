@@ -91,6 +91,7 @@ class OrderBook(Borg):
     def submit_order(self, stock_id, price, amount, order_side):
         """Submit an order to the order book."""
         try:
+            logger.info(f"Submitting order: {stock_id}, {price}, {amount}, {order_side}")
             resp = self.trade_ctx.submit_order(
                 stock_id,
                 OrderType.LO,

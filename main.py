@@ -29,6 +29,9 @@ if __name__ == "__main__":
             continue
 
         price, amount, order_side = strategy.Run()
+        logger.info(
+            f"Strategy returned - Price: {price}, Amount: {amount}, Order Side: {order_side}"
+        )
 
         if order_side is not None:
             order_book.submit(

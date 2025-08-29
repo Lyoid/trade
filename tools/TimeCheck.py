@@ -37,17 +37,17 @@ class TimeCheck(Borg):
     def get_us_time() -> datetime:
         """获取当前的美国时间"""
 
-        # Create a naive datetime (no timezone)
-        naive_time = datetime.now()
+        # Get current UTC time as a naive datetime
+        naive_utc_time = datetime.utcnow()
 
-        # Localize the naive datetime to UTC
-        utc_time = pytz.utc.localize(naive_time)
-        # logger.info(f"UTC Time: {utc_time}")
+        # Localize the naive UTC datetime to UTC
+        utc_time = pytz.utc.localize(naive_utc_time)
+        logger.info(f"UTC Time: {utc_time}")
 
         # Convert to U.S. Eastern Time
         eastern_tz = pytz.timezone("US/Eastern")
         eastern_time = utc_time.astimezone(eastern_tz)
-        # logger.info(f"U.S. Eastern Time: {eastern_time}")
+        logger.info(f"U.S. Eastern Time: {eastern_time}")
 
         # # Convert to U.S. Pacific Time
         # pacific_tz = pytz.timezone("US/Pacific")
@@ -61,7 +61,7 @@ class TimeCheck(Borg):
         """获取当前的北京时间"""
 
         # Create a naive datetime (no timezone)
-        naive_time = datetime.now()
+        naive_time = datetime.utcnow()
 
         # Localize the naive datetime to UTC
         utc_time = pytz.utc.localize(naive_time)

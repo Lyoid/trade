@@ -1,4 +1,4 @@
-log_path: /home/code/trade/log
+log_path: /root/code/trade/log
 log_name: test
 longport:
   app_key: fddd1f64ad477d0aea79928c749cc581
@@ -21,8 +21,8 @@ risk_management:
   delta_price: 0.5
 
 # stock_id: "09660.HK"
-# stock_id: "MSTX.US"
-stock_id: "MSTZ.US"
+stock_id: "MSTX.US"
+# stock_id: "MSTZ.US"
 # stock_id: 01810.HK
 
 strategy: 
