@@ -99,32 +99,37 @@ class LongPortOnline(Borg):
             # logger.info(self.stock_positions)
 
     def get_last_trade_price(self, start_date, stock_id):
-        while True:
+        last_price = []
+        for name in stock_id:
             # 先找当日成交记录
             try:
-                resp = self.trade_ctx.today_executions(symbol=stock_id)
+                resp = self.trade_ctx.today_executions(symbol=name)
                 if resp:
                     last_trader_price = resp[len(resp) - 1].price
-                    return last_trader_price
+                    last_price.append(last_trader_price)
+                    continue
 
                 # 再找历史成交记录
                 resp = self.trade_ctx.history_executions(
                     # symbol = "700.HK",
-                    symbol=stock_id,
+                    symbol=name,
                     # start_at = datetime(2022, 5, 9),
                     start_at=start_date,
                     end_at=datetime.today(),
                 )
                 if resp:
                     last_trader_price = resp[len(resp) - 1].price
-                    return last_trader_price
+                    last_price.append(last_trader_price)
+                    continue
 
-                return Decimal(0.0)
+                last_price.append(Decimal(0.0))
 
             except Exception as e:
                 logger.error(f"Failed to fetch stock positions: {e}")
                 sleep(2)
+                last_price.append(Decimal(0.0))
                 continue
+        return last_price
 
     def get_current_price(self, stock_id):
         # resp = ctx.quote(["700.HK", "AAPL.US", "TSLA.US", "NFLX.US"])
@@ -198,10 +203,10 @@ class LongPortOnline(Borg):
         # 判断美国时间是在盘前还是盘后
         us_time_str = us_time.strftime("%H:%M:%S")
         logger.info(f"us_time: {us_time_str}")
-        if us_time_str < "09:30:00":
+        if "05:00:00" <= us_time_str < "09:30:00":
             logger.info("当前为美股盘前时段")
             is_us_market = "pre_market_quote"
-        elif us_time_str > "16:00:00":
+        elif us_time_str > "16:00:00" or us_time_str <= "05:00:00":
             logger.info("当前为美股盘后时段")
             is_us_market = "post_market_quote"
         else:
@@ -210,41 +215,45 @@ class LongPortOnline(Borg):
 
         return is_beijing_market, is_us_market
 
-    def is_trading(self, stock_id):
+    def is_trading(self, stock_ids):
         # 补充 symbol_name
-        resp = self.quote_ctx.static_info([stock_id])
+        resp = self.quote_ctx.static_info(stock_ids)
         # self.symbol_name = resp[0].name_en
         # logger.info(f"symbol_name {self.symbol_name}")
 
         # 获取股票所在市场
-        market = stock_id.split(".")[1]
-        logger.info(f"market: {market}")
+        markets = []
+        for stock_id in stock_ids:
+            market = stock_id.split(".")[1]
+            markets.append(market)
+            logger.info(f"market: {market}")
 
         is_beijing_market, is_us_market = self.check_market()
-        if market == "HK":
-            if is_beijing_market:
-                logger.info("当前为港股交易时间")
-                return True
+        for market in markets:
+            if market == "HK":
+                if is_beijing_market:
+                    logger.info("当前为港股交易时间")
+                    return True
+                else:
+                    logger.info("当前为非港股交易时间")
+                    return False
+            elif market == "US":
+                if is_us_market == "on_market":
+                    logger.info("当前为美股交易时间")
+                    return True
+                elif is_us_market == "pre_market_quote":
+                    logger.info("当前为美股盘前交易时间")
+                    # logger.info("盘前市场没有访问权限,价格会返回0")
+                    return True
+                elif is_us_market == "post_market_quote":
+                    logger.info("当前为美股盘后交易时间")
+                    return True
+                else:
+                    logger.info("当前为非美股交易时间")
+                    return False
             else:
-                logger.info("当前为非港股交易时间")
+                logger.info("未知市场")
                 return False
-        elif market == "US":
-            if is_us_market == "on_market":
-                logger.info("当前为美股交易时间")
-                return True
-            elif is_us_market == "pre_market_quote":
-                logger.info("当前为美股盘前交易时间")
-                logger.info("盘前市场没有访问权限,价格会返回0")
-                return False
-            elif is_us_market == "post_market_quote":
-                logger.info("当前为美股盘后交易时间")
-                return True
-            else:
-                logger.info("当前为非美股交易时间")
-                return False
-        else:
-            logger.info("未知市场")
-            return False
 
     # 查看当前账户信息
     def get_account_balance(self):
@@ -259,16 +268,20 @@ class LongPortOnline(Borg):
         :param period: 烛图周期
         :return: 历史烛图数据
         """
-        try:
-            candlesticks = self.quote_ctx.candlesticks(
-                stock_id,
-                period,
-                self.candlestick_amount,
-                AdjustType.ForwardAdjust,
-            )
-        except OpenApiException as e:
-            logger.error(f"Error fetching candlestick data: {e}")
-            return None
+        candlesticks = []
+        for name in stock_id:
+            try:
+                candlestick = self.quote_ctx.candlesticks(
+                    name,
+                    period,
+                    self.candlestick_amount,
+                    AdjustType.ForwardAdjust,
+                )
+                candlesticks.append(candlestick)
+            except OpenApiException as e:
+                logger.error(f"Error fetching candlestick data: {e}")
+                candlesticks.append(None)
+
         return candlesticks
 
     # 更新信息

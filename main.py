@@ -17,8 +17,8 @@ if __name__ == "__main__":
     order_book = OrderBook()
     strategy = SelectStrategy(config["strategy"]["name"])()
 
-    # 初始化data类
-    data.get_last_trade_price(datetime(2025, 5, 1), stock_id)
+    # # 初始化data类
+    # data.get_last_trade_price(datetime(2025, 5, 1), stock_id)
 
     while True:
         logger.info("==========================")

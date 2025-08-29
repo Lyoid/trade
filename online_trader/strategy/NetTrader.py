@@ -44,14 +44,14 @@ class NetTrader(TraderStrategy):
         # 历史交易记录
         self.last_trader_price = data.get_last_trade_price(
             datetime(2025, 2, 1), self.stock_id
-        )
+        )[0]
 
     def Run(self) -> None:
         logger.info("Run NetTrader Strategy")
         # 查看仓位 空仓则下单
         if data.check_stock_positions(self.stock_id) == 0:
             logger.info("not have stock position create order")
-            current_price = data.get_current_price([self.stock_id])
+            current_price = data.get_current_price(self.stock_id)
             self.last_trader_price = current_price[0]
             return current_price[0], self.amount, OrderSide.Buy
         elif data.check_stock_positions(self.stock_id) == 2:
@@ -65,9 +65,9 @@ class NetTrader(TraderStrategy):
         # 历史交易记录
         self.last_trader_price = data.get_last_trade_price(
             datetime(2025, 2, 1), self.stock_id
-        )
+        )[0]
 
-        prices = data.get_current_price([self.stock_id])
+        prices = data.get_current_price(self.stock_id)
         current_price = prices[0]
         current_delta = current_price - self.last_trader_price
 

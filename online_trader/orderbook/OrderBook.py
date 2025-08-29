@@ -40,10 +40,11 @@ class OrderBook(Borg):
             print("Initialize the order book with empty lists for bids and asks.")
             super().__init__()
             self.order_book = {}
-            self.stock_id = config["stock_id"]
             self.data = dataset
             self.trade_ctx = self.data.trade_ctx
             self.quote_ctx = self.data.quote_ctx
+
+            self.stock_id = config["stock_id"][0]
             resp = self.trade_ctx.today_orders(
                 symbol=self.stock_id,
             )

@@ -62,8 +62,8 @@ class FeiShu(Borg):
             )
             return
 
-        # 处理业务结果
-        lark.logger.info(lark.JSON.marshal(response.data, indent=4))
+        # # 处理业务结果
+        # lark.logger.info(lark.JSON.marshal(response.data, indent=4))
 
 
 feishu = FeiShu()

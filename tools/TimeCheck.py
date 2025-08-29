@@ -7,6 +7,7 @@ from typing import Dict
 from datetime import datetime, timedelta
 import pytz
 
+last_time = datetime.now()
 
 class Borg:
     _shared_state = {}
@@ -25,13 +26,25 @@ class TimeCheck(Borg):
             # 如果没有实例存在，则初始化
             print("initiate the first instance with default state.")
             super().__init__()
-            self.last_time = datetime.now()
 
+
+    # 美股盘前开始/港股盘中结束16：00
     @staticmethod
-    def check_next_day(last_time, now) -> bool:
-        if now.date() > last_time.date():
+    def check_next_day() -> bool:
+        global last_time
+        ''' 如果隔天了'''
+        now = datetime.now()
+        if now.date() != last_time.date():
+            last_time = now
             return True
-        return False
+        """如果当前北京时间大于16点，返回True"""
+        now = datetime.utcnow()
+        beijing_tz = pytz.timezone("Asia/Shanghai")
+        if now.tzinfo is None:
+            now = pytz.utc.localize(now).astimezone(beijing_tz)
+        else:
+            now = now.astimezone(beijing_tz)
+        return now.hour >= 16
 
     @staticmethod
     def get_us_time() -> datetime:

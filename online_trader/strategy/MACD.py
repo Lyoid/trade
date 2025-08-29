@@ -64,14 +64,10 @@ class MACD(TraderStrategy):
         logger.info("Start macd strategy")
         # 更新数据
         if self.market == "US":
-            is_next_day = TimeCheck.check_next_day(
-                self.current_time, TimeCheck.get_us_time()
-            )
+            is_next_day = TimeCheck.check_next_day()
             self.current_time = TimeCheck.get_us_time()
         elif self.market == "HK":
-            is_next_day = TimeCheck.check_next_day(
-                self.current_time, TimeCheck.get_us_time()
-            )
+            is_next_day = TimeCheck.check_next_day()
             self.current_time = TimeCheck.get_beijing_time()
 
         if is_next_day:
