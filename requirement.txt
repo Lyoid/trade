@@ -9,3 +9,4 @@ arch
 ccxt
 pytz
 lark_oapi
+holidays

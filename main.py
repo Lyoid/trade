@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
         if order_side is not None:
             order_book.submit(
-                stock_id,
+                stock_id[0],
                 price,
                 amount,
                 order_side,

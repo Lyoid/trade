@@ -9,7 +9,6 @@ __pycache__/
 
 # C extensions
 *.so
-
 # Distribution / packaging
 work_dirs
 test
@@ -37,6 +36,8 @@ share/python-wheels/
 *.egg
 MANIFEST
 .log
+log/
+
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

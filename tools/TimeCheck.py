@@ -6,6 +6,7 @@ from config import config
 from typing import Dict
 from datetime import datetime, timedelta
 import pytz
+import holidays
 
 last_time = datetime.now()
 
@@ -50,24 +51,19 @@ class TimeCheck(Borg):
     def get_us_time() -> datetime:
         """获取当前的美国时间"""
 
-        # Get current UTC time as a naive datetime
-        naive_utc_time = datetime.utcnow()
-
-        # Localize the naive UTC datetime to UTC
-        utc_time = pytz.utc.localize(naive_utc_time)
-        logger.info(f"UTC Time: {utc_time}")
-
-        # Convert to U.S. Eastern Time
-        eastern_tz = pytz.timezone("US/Eastern")
-        eastern_time = utc_time.astimezone(eastern_tz)
-        logger.info(f"U.S. Eastern Time: {eastern_time}")
+       # 获取当前UTC时间
+        utc_now = datetime.now(pytz.utc)
+        # 转换为美国东部时间（考虑夏令时）
+        eastern = pytz.timezone('US/Eastern')
+        eastern_now = utc_now.astimezone(eastern)
+        logger.info(f"U.S. Eastern Time: {eastern_now}")
 
         # # Convert to U.S. Pacific Time
         # pacific_tz = pytz.timezone("US/Pacific")
         # pacific_time = utc_time.astimezone(pacific_tz)
         # print("U.S. Pacific Time:", pacific_time)
 
-        return eastern_time
+        return eastern_now
 
     @staticmethod
     def get_beijing_time() -> datetime:
@@ -86,6 +82,59 @@ class TimeCheck(Borg):
         # logger.info(f"Beijing Time: {beijing_time}")
 
         return beijing_time
+
+    @staticmethod
+    def is_us_holiday():
+        """判断当前美国东部时间是否为法定节假日"""
+        # 获取当前UTC时间
+        utc_now = datetime.now(pytz.utc)
+        # 转换为美国东部时间（考虑夏令时）
+        eastern = pytz.timezone('US/Eastern')
+        eastern_now = utc_now.astimezone(eastern)
+        # 获取美国联邦节假日（2025年）
+        us_holidays = holidays.US(years=eastern_now.year)
+        # 判断是否为节假日（包含观察日期，如元旦若在周末则顺延至周一）
+        return eastern_now.date() in us_holidays
+
+    @staticmethod
+    def is_hong_kong_holiday():
+        """判断当前香港时间是否为公众假期或法定假日"""
+        # 获取当前UTC时间
+        utc_now = datetime.now(pytz.utc)
+        # 转换为香港时间
+        hong_kong = pytz.timezone('Asia/Hong_Kong')
+        hong_kong_now = utc_now.astimezone(hong_kong)
+        # 获取香港公众假期（2025年，包含法定假日）
+        hk_holidays = holidays.HongKong(years=hong_kong_now.year)
+        # 判断是否为公众假期（包含法定假日）
+        return hong_kong_now.date() in hk_holidays
+
+
+    @staticmethod
+    def is_us_eastern_workday():
+        """判断当前美国东部时间是否为工作日（排除周末及法定节假日）"""
+        # 获取当前UTC时间
+        utc_now = datetime.now(pytz.utc)
+        # 转换为美国东部时间（自动处理夏令时）
+        eastern = pytz.timezone('US/Eastern')
+        eastern_now = utc_now.astimezone(eastern)
+        # 获取美国联邦法定节假日（2025年）
+        us_holidays = holidays.US(years=eastern_now.year)
+        # 判断是否为周末（5=周六，6=周日）或法定节假日
+        return eastern_now.weekday() < 5 and eastern_now.date() not in us_holidays
+
+    @staticmethod
+    def is_hong_kong_workday():
+        """判断当前香港时间是否为工作日（排除周末及法定假日）"""
+        # 获取当前UTC时间
+        utc_now = datetime.now(pytz.utc)
+        # 转换为香港时间
+        hong_kong = pytz.timezone('Asia/Hong_Kong')
+        hong_kong_now = utc_now.astimezone(hong_kong)
+        # 获取香港公众假期（含法定假日，2025年）
+        hk_holidays = holidays.HongKong(years=hong_kong_now.year)
+        # 判断是否为周末（5=周六，6=周日）或法定假日
+        return hong_kong_now.weekday() < 5 and hong_kong_now.date() not in hk_holidays
 
 
 timecheck = TimeCheck()

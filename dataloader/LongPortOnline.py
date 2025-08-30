@@ -203,19 +203,32 @@ class LongPortOnline(Borg):
         # 判断美国时间是在盘前还是盘后
         us_time_str = us_time.strftime("%H:%M:%S")
         logger.info(f"us_time: {us_time_str}")
-        if "05:00:00" <= us_time_str < "09:30:00":
+        if "04:00:00" <= us_time_str < "09:30:00":
             logger.info("当前为美股盘前时段")
             is_us_market = "pre_market_quote"
-        elif us_time_str > "16:00:00" or us_time_str <= "05:00:00":
+        elif "09:30:00" <= us_time_str < "16:00:00":
+            logger.info("当前为美股盘中时段")
+            is_us_market = "on_market"
+        elif "16:00:00" <= us_time_str < "20:00:00":
             logger.info("当前为美股盘后时段")
             is_us_market = "post_market_quote"
         else:
-            logger.info("当前为美股盘中时段")
-            is_us_market = "on_market"
+            logger.info("当前为美股夜盘时段")
+            is_us_market = "night_market"
+        
+            
 
         return is_beijing_market, is_us_market
 
     def is_trading(self, stock_ids):
+
+        # 判断是否在工作日
+        is_beijing_workday = TimeCheck.is_hong_kong_workday()
+        is_us_workday = TimeCheck.is_us_eastern_workday()
+        logger.info(
+            f"is_beijing_workday: {is_beijing_workday}, is_us_workday: {is_us_workday}"
+        )
+
         # 补充 symbol_name
         resp = self.quote_ctx.static_info(stock_ids)
         # self.symbol_name = resp[0].name_en
@@ -231,13 +244,16 @@ class LongPortOnline(Borg):
         is_beijing_market, is_us_market = self.check_market()
         for market in markets:
             if market == "HK":
-                if is_beijing_market:
+                if is_beijing_market and is_beijing_workday:
                     logger.info("当前为港股交易时间")
                     return True
                 else:
                     logger.info("当前为非港股交易时间")
                     return False
             elif market == "US":
+                if not is_us_workday:
+                    logger.info("当前为美股节假日")
+                    return False
                 if is_us_market == "on_market":
                     logger.info("当前为美股交易时间")
                     return True
@@ -248,6 +264,9 @@ class LongPortOnline(Borg):
                 elif is_us_market == "post_market_quote":
                     logger.info("当前为美股盘后交易时间")
                     return True
+                elif is_us_market == "night_market":
+                    logger.info("当前为美股夜盘交易时间，没有交易权限")
+                    return False
                 else:
                     logger.info("当前为非美股交易时间")
                     return False
