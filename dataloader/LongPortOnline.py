@@ -56,41 +56,6 @@ class LongPortOnline(Borg):
             # 持仓信息
             self.stock_positions = self.trade_ctx.stock_positions()
 
-            # 市场
-            self.market = None
-            self.market_during_time = None
-
-            # 市场时间
-            # 9:30-16:00​​
-            self.market_time = {
-                "US": {
-                    "pre_market_quote": {
-                        "begin": "16:00:00",
-                        "end": "21:30:00",
-                    },
-                    "on_market": {
-                        "begin": "22:30:00",
-                        "end": "05:00:00",
-                    },
-                    "post_market_quote": {
-                        "begin": "05:00:00",
-                        "end": "09:30:00",
-                    },
-                },
-                "HK": {
-                    "on": {
-                        "begin": "09:30:00",
-                        "end": "16:00:00",
-                    }
-                },
-            }
-
-            self.symbol_name = None
-            # 当前价格
-            self.current_price = 0.0
-            # 上一时刻价格
-            self.last_price = 0.0
-
             # 历史烛图
             self.history_candlesticks = None
             self.candlestick_amount = config["longport"]["candlestick_amount"]
@@ -134,12 +99,12 @@ class LongPortOnline(Borg):
     def get_current_price(self, stock_id):
         # resp = ctx.quote(["700.HK", "AAPL.US", "TSLA.US", "NFLX.US"])
         resp = self.quote_ctx.quote(stock_id)
-        logger.info(resp)
+        # logger.info(resp)
 
         # 检查市场
         market = []
         for name in stock_id:
-            market.append(name.split(".")[1])
+            market.append(name.split(".")[-1])
 
         # 返回价格
         prices = []
@@ -148,7 +113,7 @@ class LongPortOnline(Borg):
             f"is_beijing_market: {is_beijing_market}, is_us_market: {is_us_market}"
         )
         for index, item in enumerate(resp):
-            logger.info(f"Current price for {item.symbol}: {item.last_done}")
+            # logger.info(f"Current price for {item.symbol}: {item.last_done}")
             if market[index] == "HK":
                 if is_beijing_market:
                     prices.append(item.last_done)
@@ -157,6 +122,7 @@ class LongPortOnline(Borg):
             elif market[index] == "US":
                 if is_us_market == "on_market":
                     prices.append(item.last_done)
+                # 周末盘前运行会报错
                 elif is_us_market == "pre_market_quote":
                     logger.info(f"pre_market_quote: {item.pre_market_quote}")
                     prices.append(item.pre_market_quote.last_done)
@@ -220,7 +186,8 @@ class LongPortOnline(Borg):
 
         return is_beijing_market, is_us_market
 
-    def is_trading(self, stock_ids):
+    # 单股接口
+    def is_trading(self, stock_id):
 
         # 判断是否在工作日
         is_beijing_workday = TimeCheck.is_hong_kong_workday()
@@ -230,49 +197,46 @@ class LongPortOnline(Borg):
         )
 
         # 补充 symbol_name
-        resp = self.quote_ctx.static_info(stock_ids)
+        # resp = self.quote_ctx.static_info(stock_id)
         # self.symbol_name = resp[0].name_en
         # logger.info(f"symbol_name {self.symbol_name}")
 
         # 获取股票所在市场
-        markets = []
-        for stock_id in stock_ids:
-            market = stock_id.split(".")[1]
-            markets.append(market)
-            logger.info(f"market: {market}")
+        market = stock_id.split(".")[-1]
+        logger.info(f"market: {market}")
 
         is_beijing_market, is_us_market = self.check_market()
-        for market in markets:
-            if market == "HK":
-                if is_beijing_market and is_beijing_workday:
-                    logger.info("当前为港股交易时间")
-                    return True
-                else:
-                    logger.info("当前为非港股交易时间")
-                    return False
-            elif market == "US":
-                if not is_us_workday:
-                    logger.info("当前为美股节假日")
-                    return False
-                if is_us_market == "on_market":
-                    logger.info("当前为美股交易时间")
-                    return True
-                elif is_us_market == "pre_market_quote":
-                    logger.info("当前为美股盘前交易时间")
-                    # logger.info("盘前市场没有访问权限,价格会返回0")
-                    return True
-                elif is_us_market == "post_market_quote":
-                    logger.info("当前为美股盘后交易时间")
-                    return True
-                elif is_us_market == "night_market":
-                    logger.info("当前为美股夜盘交易时间，没有交易权限")
-                    return False
-                else:
-                    logger.info("当前为非美股交易时间")
-                    return False
+        
+        if market == "HK":
+            if is_beijing_market and is_beijing_workday:
+                logger.info("当前为港股交易时间")
+                return True
             else:
-                logger.info("未知市场")
+                logger.info("当前为非港股交易时间")
                 return False
+        elif market == "US":
+            if not is_us_workday:
+                logger.info("当前为美股节假日")
+                return False
+            if is_us_market == "on_market":
+                logger.info("当前为美股交易时间")
+                return True
+            elif is_us_market == "pre_market_quote":
+                logger.info("当前为美股盘前交易时间")
+                # logger.info("盘前市场没有访问权限,价格会返回0")
+                return True
+            elif is_us_market == "post_market_quote":
+                logger.info("当前为美股盘后交易时间")
+                return True
+            elif is_us_market == "night_market":
+                logger.info("当前为美股夜盘交易时间，没有交易权限")
+                return False
+            else:
+                logger.info("当前为非美股交易时间")
+                return False
+        else:
+            logger.info("未知市场")
+            return False
 
     # 查看当前账户信息
     def get_account_balance(self):
@@ -299,40 +263,33 @@ class LongPortOnline(Borg):
                 candlesticks.append(candlestick)
             except OpenApiException as e:
                 logger.error(f"Error fetching candlestick data: {e}")
+                logger.info(f"stock: {name}")
                 candlesticks.append(None)
 
         return candlesticks
 
-    # 更新信息
-    def update_info(self):
-        # # 价格、成交量
-        # price = self.get_current_price(stock_id)
-        # if price is not self.current_price:
-        #     self.last_price = self.current_price
-        #     self.current_price = price
-        #     logger.info(f"Current price for {stock_id}: {self.current_price}")
-        # else:
-        #     logger.info(f"No change current price for {stock_id}")
+    # 退市、停牌、非市场内股、期权、牛证过滤
+    def watchlists_by_symbol(self):
+        symbol_lists = []
+        resp = self.quote_ctx.watchlist()
+        for group in resp:
+            if len(group.securities):
+                for stock in group.securities:
+                    if stock.symbol.split(".")[-1] not in ["HK","US"]:
+                        continue
+                    symbol_lists.append(stock.symbol)
+        logger.info(f"symbol_lists: {symbol_lists}")
+        return list(set(symbol_lists))
 
-        # 账户信息
-        try:
-            self.account_balance = self.trade_ctx.account_balance()
-            logger.info(f"Account balance: {self.account_balance}")
-            # 持仓信息
-            self.stock_positions = self.trade_ctx.stock_positions()
-            logger.info(f"Stock positions: {self.stock_positions}")
-        except Exception as e:
-            logger.error(f"Failed to fetch account balance: {e}")
+    # 多股接口
+    def is_tradings(self):
+        #节假日判断
+        is_us_eastern_workday = TimeCheck.is_us_eastern_workday()
+        is_hong_kong_workday = TimeCheck.is_hong_kong_workday()
 
-        # # 历史烛图
-        # self.history_candlesticks = self.get_history_candlesticks(stock_id)
-        # # 历史交易记录
-        # self.get_last_trade_price(datetime.today(), stock_id)
-        # logger.info(f"Last trader price: {self.last_trader_price}")
-        # 市场信息
-        # self.check_market(stock_id)
-        # logger.info(f"Market: {self.market}")
-        # logger.info(f"Market during time: {self.market_during_time}")
+        logger.info(f"is_us_eastern_workday: {is_us_eastern_workday}, is_hong_kong_workday: {is_hong_kong_workday}")
+
+        return (is_us_eastern_workday or is_hong_kong_workday)
 
 
 dataset = LongPortOnline()

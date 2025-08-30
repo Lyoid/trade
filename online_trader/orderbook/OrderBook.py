@@ -44,10 +44,7 @@ class OrderBook(Borg):
             self.trade_ctx = self.data.trade_ctx
             self.quote_ctx = self.data.quote_ctx
 
-            self.stock_id = config["stock_id"][0]
-            resp = self.trade_ctx.today_orders(
-                symbol=self.stock_id,
-            )
+            resp = self.trade_ctx.today_orders()
             for order in resp:
                 if (
                     order.status != OrderStatus.Filled
@@ -61,7 +58,7 @@ class OrderBook(Borg):
             print("Order status check thread started (not awaited)..")
 
     def check_order_status(self):
-        print("Check In check_order_status")
+        logger.info(f"Check In check_order_status")
 
         while True:
             for order_id, detail in self.order_book.items():

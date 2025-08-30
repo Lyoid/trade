@@ -34,9 +34,9 @@ class MACD(TraderStrategy):
         self.period_1 = config["strategy"]["period_1"]
         self.period_2 = config["strategy"]["period_2"]
         self.amount = config["strategy"]["amount"]
-        self.stock_id = config["stock_id"]
+        self.stock_id = config["stock_id"][0]
 
-        self.market = self.stock_id.split(".")[1]
+        self.market = self.stock_id.split(".")[-1]
         if self.market == "HK":
             self.current_time = TimeCheck.get_beijing_time()
         elif self.market == "US":
@@ -59,7 +59,11 @@ class MACD(TraderStrategy):
         )
 
     def Run(self) -> None:
-        # 暂停程序执行一天
+        # 查看当前股票是否在交易时间
+        if not data.is_trading(self.stock_id):
+            # 待机60秒
+            time.sleep(60)
+            return None, None, None
 
         logger.info("Start macd strategy")
         # 更新数据

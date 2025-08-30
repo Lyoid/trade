@@ -10,9 +10,6 @@ from config import config
 
 if __name__ == "__main__":
 
-    # 配置
-    stock_id = config["stock_id"]
-
     data = LongPortOnline()
     order_book = OrderBook()
     strategy = SelectStrategy(config["strategy"]["name"])()
@@ -22,24 +19,24 @@ if __name__ == "__main__":
 
     while True:
         logger.info("==========================")
-        # 查看当前股票是否在交易时间
-        if not data.is_trading(stock_id):
-            # 待机60秒
-            time.sleep(60)
+
+        order_list = strategy.Run()
+        
+        if order_list is None or order_list is []:
             continue
 
-        price, amount, order_side = strategy.Run()
-        logger.info(
-            f"Strategy returned - Price: {price}, Amount: {amount}, Order Side: {order_side}"
-        )
-
-        if order_side is not None:
-            order_book.submit(
-                stock_id[0],
-                price,
-                amount,
-                order_side,
+        for order in order_list:
+            logger.info(
+                f"Strategy returned Stock: {order['stock_id']}, Price: {order['price']}, Amount: {order['amount']}, Order Side: {order['order_side']}"
             )
+
+            if order['order_side'] is not None:
+                order_book.submit(
+                    order['stock_id'],
+                    order['price'],
+                    order['amount'],
+                    order['order_side'],
+                )
 
         time.sleep(10)
         logger.info("==========================")
