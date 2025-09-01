@@ -49,22 +49,28 @@ class NetTrader(TraderStrategy):
     def Run(self) -> None:
 
         re = []
+        result = dict()
+        result['stock_id'] = self.stock_id[0]
+
         # 查看当前股票是否在交易时间
         if not data.is_trading(self.stock_id[0]):
             # 待机60秒
             time.sleep(60)
             return None
 
+
+
         logger.info("Run NetTrader Strategy")
         # 查看仓位 空仓则下单
-        if data.check_stock_positions(self.stock_id) == 0:
+        if data.check_stock_positions(self.stock_id[0]) == 0:
             logger.info("not have stock position create order")
             current_price = data.get_current_price(self.stock_id)
             self.last_trader_price = current_price[0]
-            return current_price[0], self.amount, OrderSide.Buy
-        elif data.check_stock_positions(self.stock_id) == 2:
-            logger.info("have stock position do nothing")
-            return None
+            result['price'] = current_price[0]
+            result['amount'] = config["strategy"]["first_amount"]
+            result['order_side'] = OrderSide.Buy
+            re.append(result)
+            return re
 
         # 开始网格交易
         logger.info("Start NetTrade")
@@ -82,8 +88,7 @@ class NetTrader(TraderStrategy):
         logger.info(f"current_price: {current_price}")
         logger.info(f"current_delta: {current_delta}")
 
-        result = dict()
-        result['stock_id'] = self.stock_id[0]
+  
         result['price'] = None
         result['amount'] = None
         result['order_side'] = None

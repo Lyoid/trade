@@ -1,5 +1,5 @@
 log_path: /root/code/trade/log
-log_name: NetTrader
+log_name: MSTZ
 longport:
   app_key: fddd1f64ad477d0aea79928c749cc581
   app_secret: d7873d6e17dbff6c0f1bb6ccf3f5a638f044ee9b6ba7f87e92399c8e8164357e
@@ -21,11 +21,18 @@ risk_management:
 # stock_id: "MSTX.US"
 # stock_id: ['MSTX.US', 'MSTZ.US','01810.HK','00558.HK']
 
+# stock_id: ["01810.HK"]
+# strategy: 
+#   name: NetTrader
+#   first_amount: 1200
+#   amount: 600
+#   delta_price: 0.5
+
 stock_id: ["MSTZ.US"]
 strategy: 
   name: NetTrader
-  first_amount: 1200
-  amount: 50
+  first_amount: 60
+  amount: 20
   delta_price: 0.5
 
 # strategy: 

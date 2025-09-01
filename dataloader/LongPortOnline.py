@@ -21,6 +21,7 @@ from log import logger
 from config import config
 from typing import Dict
 from tools.TimeCheck import TimeCheck
+import re
 
 
 class Borg:
@@ -145,6 +146,7 @@ class LongPortOnline(Borg):
             logger.info(self.stock_positions)
             # 有坑，symbol 前面是不带0的
             for stock_position in self.stock_positions.channels[0].positions:
+                print(stock_position.symbol, stock_id)
                 if stock_position.symbol in stock_id:
                     if stock_position.quantity > 0:
                         return True

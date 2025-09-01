@@ -61,10 +61,7 @@ class CallMacd(TraderStrategy):
 
     def Run(self) -> None:
 
-        if data.is_tradings():
-            # 更新数据 
-            self.current_price = data.get_current_price(self.stock_ids)
-        else:
+        if not data.is_tradings():
             logger.info("非交易时间，等待8小时")
             time.sleep(3600*8)
             return None
@@ -78,13 +75,14 @@ class CallMacd(TraderStrategy):
                 continue
 
             logger.info("Start macd strategy")
-
+            # 更新数据 
+            current_price = data.get_current_price([stock_id])[0]
             # Check if we are in the market
             # 入场条件
             candle = type(
                 "Candle",
                 (object,),
-                {"open": self.current_price[index], "close": self.current_price[index]},
+                {"open": current_price, "close": current_price},
             )()
 
             result,top_divergence,bottom_divergence = self.macd_factors[index].check(candle)
@@ -92,22 +90,24 @@ class CallMacd(TraderStrategy):
             if self.start_call[index] == True:
                 if top_divergence:
                     strline = "顶背离发生"
-                    feishu.message(f"macd {stock_id} {strline}")
+                    feishu.message(f"macd {stock_id} {strline} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
                 if bottom_divergence:
                     strline = "底背离发生"
-                    feishu.message(f"macd {stock_id} {strline}")
+                    feishu.message(f"macd {stock_id} {strline} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
                 if result == 1:
                     logger.info("macd buy")
-                    feishu.message(f"macd buy {stock_id} {self.current_price[index]}")
+                    feishu.message(f"macd buy {stock_id} {current_price} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
                 elif result == 2:
                     logger.info("macd sell")
-                    feishu.message(f"macd sell {stock_id} {self.current_price[index]}")
+                    feishu.message(f"macd sell {stock_id} {current_price} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
                 self.start_call[index] = False
 
 
             self.macd_factors[index].delete_last_candlestick()
-
+            time.sleep(5)
+        
         return None
