@@ -92,7 +92,6 @@ class LongPortOnline(Borg):
 
             except Exception as e:
                 logger.error(f"Failed to fetch stock positions: {e}")
-                sleep(2)
                 last_price.append(Decimal(0.0))
                 continue
         return last_price
