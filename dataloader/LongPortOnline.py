@@ -124,8 +124,12 @@ class LongPortOnline(Borg):
                     prices.append(item.last_done)
                 # 周末盘前运行会报错
                 elif is_us_market == "pre_market_quote":
-                    logger.info(f"pre_market_quote: {item.pre_market_quote}")
-                    prices.append(item.pre_market_quote.last_done)
+                    if item.pre_market_quote is None:
+                        logger.info(f"pre_market_quote is None, set to 0")
+                        prices.append(0)
+                    else:
+                        logger.info(f"pre_market_quote: {item.pre_market_quote}")
+                        prices.append(item.pre_market_quote.last_done)
                 elif is_us_market == "post_market_quote":
                     prices.append(item.post_market_quote.last_done)
                 else:

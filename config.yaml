@@ -29,13 +29,13 @@ risk_management:
 #   amount: 600
 #   delta_price: 0.5
 
-log_name: MSTX
-stock_id: ["MSTX.US"]
-strategy: 
-  name: NetTrader
-  first_amount: 60
-  amount: 20
-  delta_price: 0.5
+# log_name: MSTX
+# stock_id: ["MSTX.US"]
+# strategy: 
+#   name: NetTrader
+#   first_amount: 60
+#   amount: 20
+#   delta_price: 0.5
 
 # strategy: 
 #   name: MACD
@@ -43,9 +43,9 @@ strategy:
 #   period_2: 50
 #   amount: 600
 
-# log_name: CallMacd
-# strategy: 
-#   name: CallMacd
-#   period_1: 12
-#   period_2: 26
-#   period_3: 9
+log_name: CallMacd
+strategy: 
+  name: CallMacd
+  period_1: 12
+  period_2: 26
+  period_3: 9

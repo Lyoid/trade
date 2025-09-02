@@ -115,11 +115,12 @@ class OrderBook(Borg):
             order = self.order_book.get(order_id)
             if order:
                 resp = self.trade_ctx.cancel_order(order.order_id)
-                if resp.status == OrderStatus.Canceled:
-                    del self.order_book[order.order_id]
-                    logger.info(f"Order {order.order_id} canceled successfully.")
-                else:
-                    logger.info(f"Failed to cancel order {order.order_id}.")
+                if resp:
+                    if resp.status == OrderStatus.Canceled:
+                        del self.order_book[order.order_id]
+                        logger.info(f"Order {order.order_id} canceled successfully.")
+                    else:
+                        logger.info(f"Failed to cancel order {order.order_id}.")
             else:
                 logger.info(f"Order {order_id} not found in the order book.")
         except OpenApiException as e:
