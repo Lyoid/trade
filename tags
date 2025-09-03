@@ -1,0 +1,293 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/root/code/trade/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+0	.vscode/launch.json	/^        {$/;"	o	array:configurations
+1	.vscode/launch.json	/^        {$/;"	o	array:configurations
+2	.vscode/launch.json	/^        {$/;"	o	array:configurations
+BaseStatistics	statistics/BaseStatistics.py	/^class BaseStatistics():$/;"	c
+Borg	config.py	/^class Borg:$/;"	c
+Borg	dataloader/LongPortOnline.py	/^class Borg:$/;"	c
+Borg	dataloader/LongPortTest.py	/^class Borg:$/;"	c
+Borg	online_trader/orderbook/OrderBook.py	/^class Borg:$/;"	c
+Borg	tools/FeiShu.py	/^class Borg:$/;"	c
+Borg	tools/TimeCheck.py	/^class Borg:$/;"	c
+COOLDOWN	bitcoin/cross_exchange.py	/^COOLDOWN = 60  # 下单失败后冷却时间（秒）$/;"	v
+CallMacd	online_trader/strategy/CallMacd.py	/^class CallMacd(TraderStrategy):$/;"	c
+Check	factor/FactorBase.py	/^    def Check(self) -> None:$/;"	m	class:FactorBase	typeref:typename:None
+Cointegration	statistics/Cointegration.py	/^class Cointegration(BaseStatistics):$/;"	c
+Config	config.py	/^class Config(Borg):$/;"	c
+DOW_30_TICKER	dataloader/Yahoo.py	/^DOW_30_TICKER = [$/;"	v
+DoubleSMA	strategy/DoubleSMA.py	/^class DoubleSMA(bt.Strategy):$/;"	c
+FactorBase	factor/FactorBase.py	/^class FactorBase(Protocol):$/;"	c
+FeiShu	tools/FeiShu.py	/^class FeiShu(Borg):$/;"	c
+LoggerUtil	log.py	/^class LoggerUtil:$/;"	c
+LongPortOnline	dataloader/LongPortOnline.py	/^class LongPortOnline(Borg):$/;"	c
+LongPortTest	dataloader/LongPortTest.py	/^class LongPortTest(Borg):$/;"	c
+MACD	online_trader/strategy/MACD.py	/^class MACD(TraderStrategy):$/;"	c
+MACD	strategy/MACD.py	/^class MACD(StrategySelfBase):$/;"	c
+MACDFactor	factor/MACDFactor.py	/^class MACDFactor(FactorBase):$/;"	c
+MAX_RETRIES	bitcoin/cross_exchange.py	/^MAX_RETRIES = 3  # 最大重试次数$/;"	v
+MAX_SLIPPAGE	bitcoin/cross_exchange.py	/^MAX_SLIPPAGE = 0.005  # 最大滑点5%$/;"	v
+MIN_PROFIT	bitcoin/cross_exchange.py	/^MIN_PROFIT = 50  # 最小利润阈值（美元）$/;"	v
+MeanReversion	strategy/MeanReversion.py	/^class MeanReversion(StrategySelfBase):$/;"	c
+MeanReversionByStop	strategy/MeanReversionByStop.py	/^class MeanReversionByStop(StrategySelfBase):$/;"	c
+NetTrade	strategy/net_trade.py	/^class NetTrade(bt.Strategy):$/;"	c
+NetTrader	online_trader/strategy/NetTrader.py	/^class NetTrader(TraderStrategy):$/;"	c
+OrderBook	online_trader/orderbook/OrderBook.py	/^class OrderBook(Borg):$/;"	c
+PairTrade	strategy/PairTrade.py	/^class PairTrade(bt.Strategy):$/;"	c
+RSI_SMA	strategy/RSI_SMA.py	/^class RSI_SMA(StrategySelfBase):$/;"	c
+RSI_SMA_MACD	strategy/RSI_SMA_MACD.py	/^class RSI_SMA_MACD(StrategySelfBase):$/;"	c
+RiskManager	online_trader/riskmanager/ABC.py	/^class RiskManager:$/;"	c
+Run	online_trader/riskmanager/ABC.py	/^    def Run(self) -> None:$/;"	m	class:RiskManager	typeref:typename:None
+Run	online_trader/strategy/CallMacd.py	/^    def Run(self) -> None:$/;"	m	class:CallMacd	typeref:typename:None
+Run	online_trader/strategy/MACD.py	/^    def Run(self) -> None:$/;"	m	class:MACD	typeref:typename:None
+Run	online_trader/strategy/NetTrader.py	/^    def Run(self) -> None:$/;"	m	class:NetTrader	typeref:typename:None
+SYMBOL	bitcoin/cross_exchange.py	/^SYMBOL = 'BTC\/USDT'$/;"	v
+SelectStrategy	online_trader/strategy/TraderSelect.py	/^def SelectStrategy(trade_name: str):$/;"	f
+SelectStrategy	strategy/TraderSelect.py	/^def SelectStrategy(trade_name: str):$/;"	f
+SimpleMovingAverage	strategy/SimpleMovingAverage.py	/^class SimpleMovingAverage(StrategySelfBase):$/;"	c
+StrategySelfBase	strategy/StrategySelfBase.py	/^class StrategySelfBase(bt.Strategy):$/;"	c
+TRADE_AMOUNT	bitcoin/cross_exchange.py	/^TRADE_AMOUNT = 0.01  # 每次交易0.01 BTC$/;"	v
+TRADE_FEE	bitcoin/cross_exchange.py	/^TRADE_FEE = 0.001  # 假设手续费0.1%$/;"	v
+TRANSFER_FEE	bitcoin/cross_exchange.py	/^TRANSFER_FEE = 0.0005  # 假设提币费0.0005 BTC$/;"	v
+TimeCheck	tools/TimeCheck.py	/^class TimeCheck(Borg):$/;"	c
+TraderStrategy	online_trader/strategy/TraderStrategy.py	/^class TraderStrategy(Protocol):$/;"	c
+TushareData	dataloader/Tushare.py	/^class TushareData(BaseDataLoader):$/;"	c
+YahooDataloader	dataloader/Yahoo.py	/^class YahooDataloader:$/;"	c
+__init__	config.py	/^    def __init__(self) -> None:$/;"	m	class:Borg	typeref:typename:None
+__init__	config.py	/^    def __init__(self, config_path: str = "") -> None:$/;"	m	class:Config	typeref:typename:None
+__init__	dataloader/LongPortOnline.py	/^    def __init__(self) -> None:$/;"	m	class:Borg	typeref:typename:None
+__init__	dataloader/LongPortOnline.py	/^    def __init__(self) -> None:$/;"	m	class:LongPortOnline	typeref:typename:None
+__init__	dataloader/LongPortTest.py	/^    def __init__(self) -> None:$/;"	m	class:Borg	typeref:typename:None
+__init__	dataloader/LongPortTest.py	/^    def __init__(self, isplot=True):$/;"	m	class:LongPortTest
+__init__	dataloader/Tushare.py	/^    def __init__(self,isplot=True):$/;"	m	class:TushareData
+__init__	dataloader/Yahoo.py	/^   def __init__(self,start_date:str,end_date:str,ticker_list:list):#构造函数，用来实例化/;"	m	class:YahooDataloader
+__init__	factor/FactorBase.py	/^    def __init__(self, stock_id: str, cfg) -> None:$/;"	m	class:FactorBase	typeref:typename:None
+__init__	factor/MACDFactor.py	/^    def __init__(self, stock_id, hist_candlesticks=None) -> None:$/;"	m	class:MACDFactor	typeref:typename:None
+__init__	online_trader/orderbook/OrderBook.py	/^    def __init__(self) -> None:$/;"	m	class:Borg	typeref:typename:None
+__init__	online_trader/orderbook/OrderBook.py	/^    def __init__(self) -> None:$/;"	m	class:OrderBook	typeref:typename:None
+__init__	online_trader/riskmanager/ABC.py	/^    def __init__(self, config) -> None:$/;"	m	class:RiskManager	typeref:typename:None
+__init__	online_trader/strategy/CallMacd.py	/^    def __init__(self) -> None:$/;"	m	class:CallMacd	typeref:typename:None
+__init__	online_trader/strategy/MACD.py	/^    def __init__(self) -> None:$/;"	m	class:MACD	typeref:typename:None
+__init__	online_trader/strategy/NetTrader.py	/^    def __init__(self) -> None:$/;"	m	class:NetTrader	typeref:typename:None
+__init__	online_trader/strategy/TraderStrategy.py	/^    def __init__(self) -> None:$/;"	m	class:TraderStrategy	typeref:typename:None
+__init__	statistics/BaseStatistics.py	/^    def __init__(self, data):$/;"	m	class:BaseStatistics
+__init__	statistics/Cointegration.py	/^    def __init__(self, data):$/;"	m	class:Cointegration
+__init__	strategy/DoubleSMA.py	/^    def __init__(self, doprint=True):$/;"	m	class:DoubleSMA
+__init__	strategy/MACD.py	/^    def __init__(self):$/;"	m	class:MACD
+__init__	strategy/MeanReversion.py	/^    def __init__(self):$/;"	m	class:MeanReversion
+__init__	strategy/MeanReversionByStop.py	/^    def __init__(self):$/;"	m	class:MeanReversionByStop
+__init__	strategy/PairTrade.py	/^    def __init__(self, doprint=True):$/;"	m	class:PairTrade
+__init__	strategy/RSI_SMA.py	/^    def __init__(self, doprint=True):$/;"	m	class:RSI_SMA
+__init__	strategy/RSI_SMA_MACD.py	/^    def __init__(self):$/;"	m	class:RSI_SMA_MACD
+__init__	strategy/SimpleMovingAverage.py	/^    def __init__(self):$/;"	m	class:SimpleMovingAverage
+__init__	strategy/StrategySelfBase.py	/^    def __init__(self, doprint=True):$/;"	m	class:StrategySelfBase
+__init__	strategy/net_trade.py	/^    def __init__(self, doprint=True):$/;"	m	class:NetTrade
+__init__	tools/FeiShu.py	/^    def __init__(self) -> None:$/;"	m	class:Borg	typeref:typename:None
+__init__	tools/FeiShu.py	/^    def __init__(self) -> None:$/;"	m	class:FeiShu	typeref:typename:None
+__init__	tools/TimeCheck.py	/^    def __init__(self) -> None:$/;"	m	class:Borg	typeref:typename:None
+__init__	tools/TimeCheck.py	/^    def __init__(self) -> None:$/;"	m	class:TimeCheck	typeref:typename:None
+_shared_state	config.py	/^    _shared_state = {}$/;"	v	class:Borg
+_shared_state	dataloader/LongPortOnline.py	/^    _shared_state = {}$/;"	v	class:Borg
+_shared_state	dataloader/LongPortTest.py	/^    _shared_state = {}$/;"	v	class:Borg
+_shared_state	online_trader/orderbook/OrderBook.py	/^    _shared_state = {}$/;"	v	class:Borg
+_shared_state	tools/FeiShu.py	/^    _shared_state = {}$/;"	v	class:Borg
+_shared_state	tools/TimeCheck.py	/^    _shared_state = {}$/;"	v	class:Borg
+algo	factor/MACDFactor.py	/^    def algo(self, prices):$/;"	m	class:MACDFactor
+binance	bitcoin/cross_exchange.py	/^binance = ccxt.binance({$/;"	v
+bt	dataloader/LongPortTest.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	dataloader/Tushare.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	factor/MACDFactor.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/DoubleSMA.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/MACD.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/MeanReversion.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/MeanReversionByStop.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/PairTrade.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/RSI_SMA.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/RSI_SMA_MACD.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/SimpleMovingAverage.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/StrategySelfBase.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	strategy/net_trade.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+bt	test.py	/^import backtrader as bt$/;"	I	nameref:module:backtrader
+calculate_arbitrage	bitcoin/cross_exchange.py	/^def calculate_arbitrage(binance_bid: float, binance_ask: float, okx_bid: float, okx_ask: float) /;"	f	typeref:typename:Tuple[float,float,str]
+cancel_order	online_trader/orderbook/OrderBook.py	/^    def cancel_order(self, order_id):$/;"	m	class:OrderBook
+candlesticks	longport_test/history_candlesticks.py	/^candlesticks = ctx.history_candlesticks_by_date("700.HK", Period.Day, AdjustType.NoAdjust, datet/;"	v
+cerebro	test.py	/^    cerebro = bt.Cerebro()$/;"	v
+check	factor/MACDFactor.py	/^    def check(self, daily_data):$/;"	m	class:MACDFactor
+check_balance	bitcoin/cross_exchange.py	/^def check_balance(exchange: ccxt.Exchange, asset: str, min_amount: float) -> bool:$/;"	f	typeref:typename:bool
+check_market	dataloader/LongPortOnline.py	/^    def check_market(self):$/;"	m	class:LongPortOnline
+check_next_day	tools/TimeCheck.py	/^    def check_next_day() -> bool:$/;"	m	class:TimeCheck	typeref:typename:bool
+check_order_status	online_trader/orderbook/OrderBook.py	/^    def check_order_status(self):$/;"	m	class:OrderBook
+check_stock_positions	dataloader/LongPortOnline.py	/^    def check_stock_positions(self, stock_id):$/;"	m	class:LongPortOnline
+check_stockid	online_trader/orderbook/OrderBook.py	/^    def check_stockid(self, stock_id):$/;"	m	class:OrderBook
+config	config.py	/^config = Config(config_path=".\/config.yaml").config$/;"	v
+config	factor/FactorBase.py	/^    config: Dict[str, str] = {}$/;"	v	class:FactorBase	typeref:typename:Dict[str, str]
+config	longport_test/account_asset.py	/^config = Config.from_env()$/;"	v
+config	longport_test/get_candlesticks.py	/^config = Config.from_env()$/;"	v
+config	longport_test/get_market_session.py	/^config = Config.from_env()$/;"	v
+config	longport_test/get_security_list.py	/^config = Config($/;"	v
+config	longport_test/history_candlesticks.py	/^config = Config($/;"	v
+config	longport_test/replace_order.py	/^config = Config.from_env()$/;"	v
+config	longport_test/static_info.py	/^config = Config($/;"	v
+config	longport_test/submit_order.py	/^config = Config.from_env()$/;"	v
+config	longport_test/subscribe_quote.py	/^config = Config.from_env()$/;"	v
+config	longport_test/today_executions.py	/^config = Config($/;"	v
+config	longport_test/today_orders.py	/^config = Config($/;"	v
+config	longport_test/watchlist.py	/^config = Config($/;"	v
+config	online_trader/strategy/TraderStrategy.py	/^    config: Dict[str, str] = {}$/;"	v	class:TraderStrategy	typeref:typename:Dict[str, str]
+configurations	.vscode/launch.json	/^    "configurations": [$/;"	a
+console	.vscode/launch.json	/^            "console": "integratedTerminal"$/;"	s	object:configurations.0
+console	.vscode/launch.json	/^            "console": "integratedTerminal"$/;"	s	object:configurations.1
+console	.vscode/launch.json	/^            "console": "integratedTerminal"$/;"	s	object:configurations.2
+ctx	longport_test/account_asset.py	/^ctx = TradeContext(config)$/;"	v
+ctx	longport_test/get_candlesticks.py	/^ctx = QuoteContext(config)$/;"	v
+ctx	longport_test/get_market_session.py	/^ctx = QuoteContext(config)$/;"	v
+ctx	longport_test/get_security_list.py	/^ctx = QuoteContext(config)$/;"	v
+ctx	longport_test/history_candlesticks.py	/^ctx = QuoteContext(config)$/;"	v
+ctx	longport_test/replace_order.py	/^ctx = TradeContext(config)$/;"	v
+ctx	longport_test/static_info.py	/^ctx = QuoteContext(config)$/;"	v
+ctx	longport_test/submit_order.py	/^ctx = TradeContext(config)$/;"	v
+ctx	longport_test/subscribe_quote.py	/^ctx = QuoteContext(config)$/;"	v
+ctx	longport_test/today_executions.py	/^ctx = TradeContext(config)$/;"	v
+ctx	longport_test/today_orders.py	/^ctx = TradeContext(config)$/;"	v
+ctx	longport_test/watchlist.py	/^ctx = QuoteContext(config)$/;"	v
+data	main.py	/^    data = LongPortOnline()$/;"	v
+data	test.py	/^    data, df = dataset.fetch_data($/;"	v
+dataset	dataloader/LongPortOnline.py	/^dataset = LongPortOnline()$/;"	v
+dataset	dataloader/LongPortTest.py	/^dataset = LongPortTest()$/;"	v
+dataset	test.py	/^    dataset = LongPortTest(isplot=False)$/;"	v
+delete_last_candlestick	factor/MACDFactor.py	/^    def delete_last_candlestick(self):$/;"	m	class:MACDFactor
+df	test.py	/^    data, df = dataset.fetch_data($/;"	v
+execute_arbitrage	bitcoin/cross_exchange.py	/^def execute_arbitrage(buy_exchange: ccxt.Exchange, sell_exchange: ccxt.Exchange, buy_price: floa/;"	f	typeref:typename:bool
+feishu	tools/FeiShu.py	/^feishu = FeiShu()$/;"	v
+fetch_data	dataloader/LongPortTest.py	/^    def fetch_data(self, stock_ids, start_time=None, end_time=None):$/;"	m	class:LongPortTest
+fetch_data	dataloader/Tushare.py	/^    def fetch_data(self, $/;"	m	class:TushareData
+fetch_data	dataloader/Yahoo.py	/^   def fetch_data(self,proxy=None):$/;"	m	class:YahooDataloader
+fetch_orderbook	bitcoin/cross_exchange.py	/^def fetch_orderbook(exchange: ccxt.Exchange, symbol: str) -> Tuple[Optional[float], Optional[flo/;"	f	typeref:typename:Tuple[Optional[float],Optional[float]]
+formatter	longport_test/get_security_list.py	/^formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')$/;"	v
+get_account_balance	dataloader/LongPortOnline.py	/^    def get_account_balance(self):$/;"	m	class:LongPortOnline
+get_beijing_time	tools/TimeCheck.py	/^    def get_beijing_time() -> datetime:$/;"	m	class:TimeCheck	typeref:typename:datetime
+get_current_price	dataloader/LongPortOnline.py	/^    def get_current_price(self, stock_id):$/;"	m	class:LongPortOnline
+get_history_candlesticks	dataloader/LongPortOnline.py	/^    def get_history_candlesticks(self, stock_id, period=Period.Day):$/;"	m	class:LongPortOnline
+get_history_candlesticks	dataloader/LongPortTest.py	/^    def get_history_candlesticks(stock_id, period=Period.Day):$/;"	m	class:LongPortTest
+get_last_day_close	dataloader/LongPortTest.py	/^    def get_last_day_close(self, stock_id, day=None):$/;"	m	class:LongPortTest
+get_last_trade_price	dataloader/LongPortOnline.py	/^    def get_last_trade_price(self, start_date, stock_id):$/;"	m	class:LongPortOnline
+get_logger	log.py	/^    def get_logger(name=None):$/;"	m	class:LoggerUtil
+get_stock_info	dataloader/LongPortOnline.py	/^    def get_stock_info(self, stock_ids):$/;"	m	class:LongPortOnline
+get_us_time	tools/TimeCheck.py	/^    def get_us_time() -> datetime:$/;"	m	class:TimeCheck	typeref:typename:datetime
+handler	longport_test/get_security_list.py	/^handler = TimedRotatingFileHandler(log_path, when='D', interval=1, backupCount=30)$/;"	v
+hello	strategy/StrategySelfBase.py	/^    def hello():$/;"	m	class:StrategySelfBase
+http_cli	longport_test/http_client.py	/^http_cli = HttpClient.from_env()$/;"	v
+img	test.py	/^    img = cerebro.plot(style="candle", volume=True)$/;"	v
+init_factor	online_trader/strategy/CallMacd.py	/^    def init_factor(self, index) -> None:$/;"	m	class:CallMacd	typeref:typename:None
+init_strategy	online_trader/strategy/CallMacd.py	/^    def init_strategy(self) -> None:$/;"	m	class:CallMacd	typeref:typename:None
+init_strategy	online_trader/strategy/MACD.py	/^    def init_strategy(self) -> None:$/;"	m	class:MACD	typeref:typename:None
+is_hong_kong_holiday	tools/TimeCheck.py	/^    def is_hong_kong_holiday():$/;"	m	class:TimeCheck
+is_hong_kong_workday	tools/TimeCheck.py	/^    def is_hong_kong_workday():$/;"	m	class:TimeCheck
+is_on_market	dataloader/LongPortOnline.py	/^    def is_on_market(self, stock_id):$/;"	m	class:LongPortOnline
+is_trading	dataloader/LongPortOnline.py	/^    def is_trading(self, stock_id):$/;"	m	class:LongPortOnline
+is_tradings	dataloader/LongPortOnline.py	/^    def is_tradings(self):$/;"	m	class:LongPortOnline
+is_us_eastern_workday	tools/TimeCheck.py	/^    def is_us_eastern_workday():$/;"	m	class:TimeCheck
+is_us_holiday	tools/TimeCheck.py	/^    def is_us_holiday():$/;"	m	class:TimeCheck
+lark	tools/FeiShu.py	/^import lark_oapi as lark$/;"	I	nameref:module:lark_oapi
+last_time	tools/TimeCheck.py	/^last_time = datetime.now()$/;"	v
+log	strategy/DoubleSMA.py	/^    def log(self, txt, dt=None):$/;"	m	class:DoubleSMA
+log	strategy/PairTrade.py	/^    def log(self, txt, dt=None):$/;"	m	class:PairTrade
+log	strategy/StrategySelfBase.py	/^    def log(self, txt, dt=None):$/;"	m	class:StrategySelfBase
+log	strategy/net_trade.py	/^    def log(self, txt, dt=None):$/;"	m	class:NetTrade
+log_path	longport_test/get_security_list.py	/^log_path = os.path.join("",'stocks_list.log')$/;"	v
+logger	log.py	/^logger = LoggerUtil.get_logger()$/;"	v
+logger	longport_test/get_security_list.py	/^logger = logging.getLogger("stocks_list")$/;"	v
+main	bitcoin/cross_exchange.py	/^def main():$/;"	f
+message	tools/FeiShu.py	/^    def message(self, text: str):$/;"	m	class:FeiShu
+msg	online_trader/strategy/CallMacd.py	/^    def msg(self, stock_id, strline, price=None):$/;"	m	class:CallMacd
+name	.vscode/launch.json	/^            "name": "history_candlesticks",$/;"	s	object:configurations.0
+name	.vscode/launch.json	/^            "name": "main",$/;"	s	object:configurations.2
+name	.vscode/launch.json	/^            "name": "test",$/;"	s	object:configurations.1
+next	online_trader/strategy/TraderStrategy.py	/^    def next(self) -> None:$/;"	m	class:TraderStrategy	typeref:typename:None
+next	strategy/DoubleSMA.py	/^    def next(self):$/;"	m	class:DoubleSMA
+next	strategy/MACD.py	/^    def next(self):$/;"	m	class:MACD
+next	strategy/MeanReversion.py	/^    def next(self):$/;"	m	class:MeanReversion
+next	strategy/MeanReversionByStop.py	/^    def next(self):$/;"	m	class:MeanReversionByStop
+next	strategy/PairTrade.py	/^    def next(self):$/;"	m	class:PairTrade
+next	strategy/RSI_SMA.py	/^    def next(self):$/;"	m	class:RSI_SMA
+next	strategy/RSI_SMA_MACD.py	/^    def next(self):$/;"	m	class:RSI_SMA_MACD
+next	strategy/SimpleMovingAverage.py	/^    def next(self):$/;"	m	class:SimpleMovingAverage
+next	strategy/StrategySelfBase.py	/^    def next(self):$/;"	m	class:StrategySelfBase
+next	strategy/net_trade.py	/^    def next(self):$/;"	m	class:NetTrade
+notify_order	strategy/DoubleSMA.py	/^    def notify_order(self, order):$/;"	m	class:DoubleSMA
+notify_order	strategy/PairTrade.py	/^    def notify_order(self, order):$/;"	m	class:PairTrade
+notify_order	strategy/StrategySelfBase.py	/^    def notify_order(self, order):$/;"	m	class:StrategySelfBase
+notify_order	strategy/net_trade.py	/^    def notify_order(self, order):$/;"	m	class:NetTrade
+notify_trade	strategy/DoubleSMA.py	/^    def notify_trade(self, trade):$/;"	m	class:DoubleSMA
+notify_trade	strategy/PairTrade.py	/^    def notify_trade(self, trade):$/;"	m	class:PairTrade
+notify_trade	strategy/StrategySelfBase.py	/^    def notify_trade(self, trade):$/;"	m	class:StrategySelfBase
+notify_trade	strategy/net_trade.py	/^    def notify_trade(self, trade):$/;"	m	class:NetTrade
+np	statistics/Cointegration.py	/^import numpy as np$/;"	I	nameref:module:numpy
+oder_book	online_trader/orderbook/OrderBook.py	/^oder_book = OrderBook()$/;"	v
+okx	bitcoin/cross_exchange.py	/^okx = ccxt.okx({$/;"	v
+on_quote	longport_test/subscribe_quote.py	/^def on_quote(symbol: str, quote: PushQuote):$/;"	f
+order_book	main.py	/^    order_book = OrderBook()$/;"	v
+order_list	main.py	/^        order_list = strategy.Run()$/;"	v
+params	factor/MACDFactor.py	/^    params = {$/;"	v	class:MACDFactor
+params	strategy/DoubleSMA.py	/^    params = ($/;"	v	class:DoubleSMA
+params	strategy/MeanReversion.py	/^    params = ($/;"	v	class:MeanReversion
+params	strategy/MeanReversionByStop.py	/^    params = ($/;"	v	class:MeanReversionByStop
+params	strategy/RSI_SMA.py	/^    params = ($/;"	v	class:RSI_SMA
+params	strategy/RSI_SMA_MACD.py	/^    params = ($/;"	v	class:RSI_SMA_MACD
+params	strategy/SimpleMovingAverage.py	/^    params = ($/;"	v	class:SimpleMovingAverage
+pd	dataloader/LongPortOnline.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+pd	dataloader/LongPortTest.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+pd	dataloader/Tushare.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+pd	dataloader/Yahoo.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+pd	factor/MACDFactor.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+pd	statistics/Cointegration.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+pd	strategy/StrategySelfBase.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+pd	tools/TimeCheck.py	/^import pandas as pd$/;"	I	nameref:module:pandas
+place_order	bitcoin/cross_exchange.py	/^def place_order(exchange: ccxt.Exchange, symbol: str, side: str, amount: float, price: float) ->/;"	f	typeref:typename:bool
+plt	statistics/Cointegration.py	/^import matplotlib.pyplot as plt$/;"	I	nameref:module:matplotlib.pyplot
+plt	test.py	/^import matplotlib.pyplot as plt$/;"	I	nameref:module:matplotlib.pyplot
+process	statistics/BaseStatistics.py	/^    def process(self):$/;"	m	class:BaseStatistics
+process	statistics/Cointegration.py	/^    def process(self):$/;"	m	class:Cointegration
+program	.vscode/launch.json	/^            "program": ".\/online_trader\/NetTrader.py",$/;"	s	object:configurations.0
+program	.vscode/launch.json	/^            "program": "main.py",$/;"	s	object:configurations.2
+program	.vscode/launch.json	/^            "program": "test.py",$/;"	s	object:configurations.1
+request	.vscode/launch.json	/^            "request": "launch",$/;"	s	object:configurations.0
+request	.vscode/launch.json	/^            "request": "launch",$/;"	s	object:configurations.1
+request	.vscode/launch.json	/^            "request": "launch",$/;"	s	object:configurations.2
+resp	longport_test/account_asset.py	/^resp = ctx.account_balance()$/;"	v
+resp	longport_test/account_asset.py	/^resp = ctx.stock_positions()$/;"	v
+resp	longport_test/get_candlesticks.py	/^resp = ctx.candlesticks("700.HK", Period.Day, 10, AdjustType.NoAdjust)$/;"	v
+resp	longport_test/get_market_session.py	/^resp = ctx.trading_session()$/;"	v
+resp	longport_test/get_security_list.py	/^resp = ctx.security_list(Market.US, SecurityListCategory.Overnight)$/;"	v
+resp	longport_test/http_client.py	/^resp = http_cli.request("get", "\/v1\/trade\/execution\/today")$/;"	v
+resp	longport_test/static_info.py	/^resp = ctx.static_info(["01810.HK","MSTX.US"])$/;"	v
+resp	longport_test/submit_order.py	/^resp = ctx.submit_order($/;"	v
+resp	longport_test/today_executions.py	/^resp = ctx.today_executions(symbol="MSTZ.US")$/;"	v
+resp	longport_test/today_orders.py	/^resp = ctx.today_orders()$/;"	v
+resp	longport_test/watchlist.py	/^resp = ctx.watchlist()$/;"	v
+result	test.py	/^    result = cerebro.run()$/;"	v
+sm	statistics/Cointegration.py	/^import statsmodels.api as sm$/;"	I	nameref:module:statsmodels.api
+stock_id	longport_test/today_executions.py	/^stock_id = ["MSTZ.US","01810.HK"]$/;"	v
+stop	strategy/StrategySelfBase.py	/^    def stop(self):$/;"	m	class:StrategySelfBase
+strategy	main.py	/^    strategy = SelectStrategy(config["strategy"]["name"])()$/;"	v
+strategy	test.py	/^    strategy = SelectStrategy(config["strategy"]["name"])$/;"	v
+submit	online_trader/orderbook/OrderBook.py	/^    def submit(self, stock_id, price, amount, order_side, order_id=None):$/;"	m	class:OrderBook
+submit_order	online_trader/orderbook/OrderBook.py	/^    def submit_order(self, stock_id, price, amount, order_side):$/;"	m	class:OrderBook
+symbols	longport_test/subscribe_quote.py	/^symbols = ["700.HK", "AAPL.US", "TSLA.US", "NFLX.US"]$/;"	v
+timecheck	tools/TimeCheck.py	/^timecheck = TimeCheck()$/;"	v
+trade	README.md	/^# trade$/;"	c
+ts	dataloader/Tushare.py	/^import tushare as ts$/;"	I	nameref:module:tushare
+type	.vscode/launch.json	/^            "type": "debugpy",$/;"	s	object:configurations.0
+type	.vscode/launch.json	/^            "type": "debugpy",$/;"	s	object:configurations.1
+type	.vscode/launch.json	/^            "type": "debugpy",$/;"	s	object:configurations.2
+watchlists_by_symbol	dataloader/LongPortOnline.py	/^    def watchlists_by_symbol(self):$/;"	m	class:LongPortOnline
+yf	dataloader/Yahoo.py	/^import yfinance as yf$/;"	I	nameref:module:yfinance

@@ -40,6 +40,10 @@ class CallMacd(TraderStrategy):
         data = LongPortOnline()
 
         self.stock_ids = data.watchlists_by_symbol()
+        static_info = data.get_stock_info(self.stock_ids)
+        logger.info(f"static inof {static_info}")
+        self.stocks_info = dict(zip(self.stock_ids, data.get_stock_info(self.stock_ids)))
+        self.recall = True
 
         self.init_strategy()
 
@@ -72,7 +76,14 @@ class CallMacd(TraderStrategy):
             if not data.is_trading(stock_id):
                 self.init_factor(index)
                 self.start_call[index] = True
+                self.recall = True
                 continue
+
+            # 针对美股盘中，再报送一次消息
+            if data.is_on_market(stock_id) and self.recall:
+                logger.info(f"{stock_id} is in market time")
+                self.start_call[index] = True
+                self.recall = False
 
             logger.info("Start macd strategy")
             # 更新数据 
@@ -89,20 +100,17 @@ class CallMacd(TraderStrategy):
 
             if self.start_call[index] == True:
                 if top_divergence:
-                    strline = "顶背离发生"
-                    feishu.message(f"macd {stock_id} {strline} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    self.msg(stock_id, "顶背离发生")
 
                 if bottom_divergence:
-                    strline = "底背离发生"
-                    feishu.message(f"macd {stock_id} {strline} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    self.msg(stock_id, "底背离发生")
 
                 if result == 1:
                     logger.info("macd buy")
-                    feishu.message(f"macd buy {stock_id} {current_price} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
+                    self.msg(stock_id, "买入信号", current_price)
                 elif result == 2:
                     logger.info("macd sell")
-                    feishu.message(f"macd sell {stock_id} {current_price} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+                    self.msg(stock_id, "卖出信号", current_price)
 
                 self.start_call[index] = False
 
@@ -111,3 +119,14 @@ class CallMacd(TraderStrategy):
             time.sleep(5)
         
         return None
+
+    def msg(self, stock_id, strline, price=None):
+        msg = (
+            f" id：{stock_id}"
+            f" 名字：{self.stocks_info[stock_id].name_cn} {self.stocks_info[stock_id].name_en}"
+            f" 状态：{strline}"
+            f" 价格：{price if price is not None else data.get_current_price([stock_id])[0]}"
+            f" 策略：MACD"
+            f" 时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        )
+        feishu.message(msg)
