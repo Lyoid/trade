@@ -43,7 +43,6 @@ class CallMacd(TraderStrategy):
         static_info = data.get_stock_info(self.stock_ids)
         logger.info(f"static inof {static_info}")
         self.stocks_info = dict(zip(self.stock_ids, data.get_stock_info(self.stock_ids)))
-        self.recall = True
 
         self.init_strategy()
 
@@ -51,7 +50,7 @@ class CallMacd(TraderStrategy):
         last_order = ""
         self.candlesticks = data.get_history_candlesticks(self.stock_ids)
         self.start_call = [True for i in self.stock_ids]
-
+        self.recall = [True for i in self.stock_ids]
 
         self.macd_factors = [
             MACDFactor(stock_id=self.stock_ids[index], hist_candlesticks=self.candlesticks[index])
@@ -76,14 +75,14 @@ class CallMacd(TraderStrategy):
             if not data.is_trading(stock_id):
                 self.init_factor(index)
                 self.start_call[index] = True
-                self.recall = True
+                self.recall[index] = True
                 continue
 
             # 针对美股盘中，再报送一次消息
-            if data.is_on_market(stock_id) and self.recall:
+            if data.is_on_market(stock_id) and self.recall[index]:
                 logger.info(f"{stock_id} is in market time")
                 self.start_call[index] = True
-                self.recall = False
+                self.recall[index] = False
 
             logger.info("Start macd strategy")
             # 更新数据 

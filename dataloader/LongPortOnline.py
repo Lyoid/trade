@@ -134,7 +134,8 @@ class LongPortOnline(Borg):
                     if item.pre_market_quote is None:
                         logger.info(f"post_market_quote is None, set to 0")
                         prices.append(0)
-                    prices.append(item.post_market_quote.last_done)
+                    else:
+                        prices.append(item.post_market_quote.last_done)
                 else:
                     prices.append(item.last_done)
 
@@ -146,7 +147,7 @@ class LongPortOnline(Borg):
                 self.stock_positions = self.trade_ctx.stock_positions()
             except Exception as e:
                 logger.error(f"Failed to fetch stock positions: {e}")
-                sleep(2)
+                time.sleep(2)
                 continue
 
             logger.info(self.stock_positions)
@@ -175,15 +176,16 @@ class LongPortOnline(Borg):
         # )
 
         # 判断美国时间是在盘前还是盘后
+        # 为了规避长桥接口在每个盘口都会返回None的问题，延长进盘时刻
         us_time_str = us_time.strftime("%H:%M:%S")
         logger.info(f"us_time: {us_time_str}")
-        if "04:00:00" <= us_time_str < "09:30:00":
+        if "04:05:00" <= us_time_str < "09:30:00":
             logger.info("当前为美股盘前时段")
             is_us_market = "pre_market_quote"
-        elif "09:30:00" <= us_time_str < "16:00:00":
+        elif "09:35:00" <= us_time_str < "16:00:00":
             logger.info("当前为美股盘中时段")
             is_us_market = "on_market"
-        elif "16:00:00" <= us_time_str < "20:00:00":
+        elif "16:05:00" <= us_time_str < "20:00:00":
             logger.info("当前为美股盘后时段")
             is_us_market = "post_market_quote"
         else:
