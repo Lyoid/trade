@@ -11,23 +11,23 @@ feishu:
   app_secret: 4QmHdH2XrhBnSmd9tN73LPvnPwiiWxPh
   open_id: ou_d3db55004e78fd1d378d239fae7c43bf
 
-risk_management: 
-  name: NetTrader
-  first_amount: 1200
-  amount: 600
-  delta_price: 0.5
+    #risk_management: 
+    #  name: NetTrader
+    #  first_amount: 1200
+    #  amount: 600
+    #  delta_price: 0.5
 
 #stock_id: "09660.HK"
 #stock_id: "MSTX.US"
 #stock_id: ['MSTX.US', 'MSTZ.US','01810.HK','00558.HK']
 
-#log_name: xiaomi
-#stock_id: ["01810.HK"]
-#strategy: 
-#  name: NetTrader
-#  first_amount: 1200
-#  amount: 600
-#  delta_price: 0.5
+    #log_name: xiaomi
+    #stock_id: ["01810.HK"]
+    #strategy: 
+    #  name: NetTrader
+    #  first_amount: 1200
+    #  amount: 600
+    #  delta_price: 0.5
 
 #log_name: MSTX
 #stock_id: ["MSTX.US"]
@@ -45,7 +45,7 @@ risk_management:
 
 log_name: CallMacd
 strategy: 
-  name: CallMacd
-  period_1: 12
-  period_2: 26
-  period_3: 9
+   name: CallMacd 
+   period_1: 12
+   period_2: 26
+   period_3: 9

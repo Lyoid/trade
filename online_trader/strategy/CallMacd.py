@@ -86,7 +86,15 @@ class CallMacd(TraderStrategy):
 
             logger.info("Start macd strategy")
             # 更新数据 
-            current_price = data.get_current_price([stock_id])[0]
+            current_price = data.get_current_price([stock_id])
+            if len(current_price) == 0:
+                continue
+                logger.info(f"{stock_id} not have pre market or someting wrong!")
+            else:
+                current_price = current_price[0]
+                if current_price == 0:
+                    continue
+                    logger.info(f"{stock_id} someting wrong!")
             # Check if we are in the market
             # 入场条件
             candle = type(
@@ -98,11 +106,11 @@ class CallMacd(TraderStrategy):
             result,top_divergence,bottom_divergence = self.macd_factors[index].check(candle)
 
             if self.start_call[index] == True:
-                if top_divergence:
-                    self.msg(stock_id, "顶背离发生")
+               # if top_divergence:
+                #    self.msg(stock_id, "顶背离发生")
 
-                if bottom_divergence:
-                    self.msg(stock_id, "底背离发生")
+               # if bottom_divergence:
+               #     self.msg(stock_id, "底背离发生")
 
                 if result == 1:
                     logger.info("macd buy")
@@ -121,11 +129,11 @@ class CallMacd(TraderStrategy):
 
     def msg(self, stock_id, strline, price=None):
         msg = (
-            f" id：{stock_id}"
-            f" 名字：{self.stocks_info[stock_id].name_cn} {self.stocks_info[stock_id].name_en}"
-            f" 状态：{strline}"
-            f" 价格：{price if price is not None else data.get_current_price([stock_id])[0]}"
-            f" 策略：MACD"
-            f" 时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            f" id：{stock_id} \\n"
+            f" 名字：{self.stocks_info[stock_id].name_cn} {self.stocks_info[stock_id].name_en} \\n"
+            f" 状态：{strline} \\n"
+            f" 价格：{price if price is not None else data.get_current_price([stock_id])[0]} \\n"
+            f" 策略：MACD \\n"
+            f" 时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} \\n"
         )
         feishu.message(msg)

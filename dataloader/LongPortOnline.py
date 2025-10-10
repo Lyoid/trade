@@ -126,14 +126,14 @@ class LongPortOnline(Borg):
                 elif is_us_market == "pre_market_quote":
                     if item.pre_market_quote is None:
                         logger.info(f"pre_market_quote is None, set to 0")
-                        prices.append(0)
+                        #prices.append(0)
                     else:
                         logger.info(f"pre_market_quote: {item.pre_market_quote}")
                         prices.append(item.pre_market_quote.last_done)
                 elif is_us_market == "post_market_quote":
                     if item.pre_market_quote is None:
                         logger.info(f"post_market_quote is None, set to 0")
-                        prices.append(0)
+                        #prices.append(0)
                     else:
                         prices.append(item.post_market_quote.last_done)
                 else:
