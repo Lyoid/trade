@@ -80,10 +80,11 @@ class MACDFactor(FactorBase):
 
 
 
-    def check(self, daily_data):
+    def check(self, daily_data=None):
         logger.info("Start macd strategy")
         # 更新数据
-        self.candlesticks.append(daily_data)
+        if daily_data is not None:
+            self.candlesticks.append(daily_data)
 
         if len(self.candlesticks) < self.params["period_2"]:
             logger.info("Not enough data to calculate MACD, waiting for more data")
@@ -92,9 +93,11 @@ class MACDFactor(FactorBase):
         # 计算MACD指标
         # 计算所有30日均线和50日均线
         closes = [candle.close for candle in self.candlesticks]
-
-        golden_cross,death_cross,top_divergence,bottom_divergence = self.algo(closes)
-
+        try:
+            golden_cross,death_cross,top_divergence,bottom_divergence = self.algo(closes)
+        except Exception as e:
+            logger.error("macd factor algo calculate fail")
+            return 0,False,False
         
         today_index = len(self.candlesticks) - 1
         if len(golden_cross) > 0 and golden_cross[-1] == today_index:

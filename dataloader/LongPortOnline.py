@@ -286,6 +286,10 @@ class LongPortOnline(Borg):
             else:
                 logger.info("当前为非美股交易时间")
                 return False
+        elif market == "SH":
+            if is_beijing_market and is_beijing_workday:
+                logger.info("当前为A股交易时间")
+                return True
         else:
             logger.info("未知市场")
             return False

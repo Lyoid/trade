@@ -32,6 +32,7 @@ class CallMacd(TraderStrategy):
         super().__init__()
         self.period_1 = config["strategy"]["period_1"]
         self.period_2 = config["strategy"]["period_2"]
+        self.delta_percent = config["strategy"]["delta"]
 
         global data
         global order_book
@@ -60,7 +61,24 @@ class CallMacd(TraderStrategy):
     def init_factor(self, index) -> None:
         self.candlesticks = data.get_history_candlesticks([self.stock_ids[index]])
         self.macd_factors[index] = MACDFactor(stock_id=self.stock_ids[index], hist_candlesticks=self.candlesticks[0])
-        
+ 
+
+    def OpenCloseDelta(self, index):
+        # 获取昨天的开盘价及收盘价
+        candlesticks = data.get_history_candlesticks([self.stock_ids[index]])
+        if len(candlesticks) == 0:
+            return False
+        if candlesticks[0] is None:
+            return False
+        # logger.info(f"{candlesticks[0][-1]}")
+        open_price = candlesticks[0][-1].open
+        close_price = candlesticks[0][-1].close
+        delta = (close_price - open_price)/open_price
+        logger.info(f"open:{open_price};close:{close_price};delta:{delta}")
+        if delta > self.delta_percent:
+            return True
+        else:
+            return False
 
     def Run(self) -> None:
 
@@ -86,25 +104,27 @@ class CallMacd(TraderStrategy):
 
             logger.info("Start macd strategy")
             # 更新数据 
-            current_price = data.get_current_price([stock_id])
-            if len(current_price) == 0:
-                continue
-                logger.info(f"{stock_id} not have pre market or someting wrong!")
-            else:
-                current_price = current_price[0]
-                if current_price == 0:
-                    continue
-                    logger.info(f"{stock_id} someting wrong!")
-            # Check if we are in the market
-            # 入场条件
-            candle = type(
-                "Candle",
-                (object,),
-                {"open": current_price, "close": current_price},
-            )()
+          #  current_price = data.get_current_price([stock_id])
+          #  if len(current_price) == 0:
+          #      continue
+          #      logger.info(f"{stock_id} not have pre market or someting wrong!")
+          #  else:
+          #      current_price = current_price[0]
+          #      if current_price == 0:
+          #          continue
+          #          logger.info(f"{stock_id} someting wrong!")
+          #  # Check if we are in the market
+          #  # 入场条件
+          #  candle = type(
+          #      "Candle",
+          #      (object,),
+          #      {"open": current_price, "close": current_price},
+          #  )()
 
-            result,top_divergence,bottom_divergence = self.macd_factors[index].check(candle)
+          #  result,top_divergence,bottom_divergence = self.macd_factors[index].check(candle)
 
+            result_1,top_divergence,bottom_divergence = self.macd_factors[index].check()
+            result_2 = self.OpenCloseDelta(index)
             if self.start_call[index] == True:
                # if top_divergence:
                 #    self.msg(stock_id, "顶背离发生")
@@ -112,17 +132,19 @@ class CallMacd(TraderStrategy):
                # if bottom_divergence:
                #     self.msg(stock_id, "底背离发生")
 
-                if result == 1:
+                if result_1 == 1 and result_2 == True:
                     logger.info("macd buy")
-                    self.msg(stock_id, "买入信号", current_price)
-                elif result == 2:
+                    # self.msg(stock_id, "买入信号", current_price)
+                    self.msg(stock_id, "昨日收盘价，买入信号")
+                elif result_1 == 2:
                     logger.info("macd sell")
-                    self.msg(stock_id, "卖出信号", current_price)
+                    # self.msg(stock_id, "卖出信号", current_price)
+                    self.msg(stock_id, "昨日收盘价，卖出信号")
 
                 self.start_call[index] = False
 
 
-            self.macd_factors[index].delete_last_candlestick()
+            # self.macd_factors[index].delete_last_candlestick()
             time.sleep(5)
         
         return None
@@ -132,7 +154,7 @@ class CallMacd(TraderStrategy):
             f" id：{stock_id} \\n"
             f" 名字：{self.stocks_info[stock_id].name_cn} {self.stocks_info[stock_id].name_en} \\n"
             f" 状态：{strline} \\n"
-            f" 价格：{price if price is not None else data.get_current_price([stock_id])[0]} \\n"
+           # f" 价格：{price if price is not None else data.get_current_price([stock_id])[0]} \\n"
             f" 策略：MACD \\n"
             f" 时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} \\n"
         )
