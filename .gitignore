@@ -6,7 +6,7 @@ cluster_submit.yaml
 __pycache__/
 *.py[cod]
 *$py.class
-
+.vscode/
 # C extensions
 *.so
 # Distribution / packaging
