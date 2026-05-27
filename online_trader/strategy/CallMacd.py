@@ -83,8 +83,12 @@ class CallMacd(TraderStrategy):
     def Run(self) -> None:
 
         if not data.is_tradings():
-            logger.info("非交易时间，等待8小时")
-            time.sleep(3600*8)
+            sched = config.get("scheduler") or {}
+            if sched.get("enabled") and sched.get("mode") == "daily":
+                logger.info("非交易时间，跳过本次定时扫描")
+            else:
+                logger.info("非交易时间，等待8小时")
+                time.sleep(3600 * 8)
             return None
 
         for index, stock_id in enumerate(self.stock_ids):
@@ -133,13 +137,10 @@ class CallMacd(TraderStrategy):
                #     self.msg(stock_id, "底背离发生")
 
                 if result_1 == 1 and result_2 == True:
-                    logger.info("macd buy")
-                    # self.msg(stock_id, "买入信号", current_price)
-                    self.msg(stock_id, "昨日收盘价，买入信号")
+                    logger.info("macd golden cross buy")
+                    self.msg(stock_id, "MACD金叉，昨日收涨，买入信号")
                 elif result_1 == 2:
-                    logger.info("macd sell")
-                    # self.msg(stock_id, "卖出信号", current_price)
-                    self.msg(stock_id, "昨日收盘价，卖出信号")
+                    logger.info("macd death cross sell (no feishu)")
 
                 self.start_call[index] = False
 

@@ -161,6 +161,3 @@ class OrderBook(Borg):
             order_id = self.submit_order(stock_id, price, amount, order_side)
 
         return order_id
-
-
-oder_book = OrderBook()
