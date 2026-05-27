@@ -6,18 +6,18 @@
 
 ## 安装
 
-项目使用 **仓库内虚拟环境** `.venv`（不依赖系统 Python 的全局包）。在本机执行：
+使用本机 `python3` / `pip` 安装依赖（不创建虚拟环境）：
 
 ```bash
 cd /Users/lyoid/code/trade   # 换成你的项目路径
-./scripts/setup_venv.sh      # 创建 .venv 并安装依赖
-./scripts/verify_env.sh      # 校验环境是否可用
+./scripts/setup_venv.sh      # python3 -m pip install -r requirement.txt
+./scripts/verify_env.sh      # 按 requirement.txt 检查依赖是否已安装
 ```
 
-日常命令请用项目 Python（任选其一）：
+日常命令：
 
 ```bash
-.venv/bin/python main.py --once
+python3 main.py --once
 ./scripts/run_callmacd_once.sh
 ```
 
@@ -115,9 +115,10 @@ macOS 对 `cron` 限制较严，若到点没有日志、任务未运行，请检
 
 ### 6. Python 环境
 
-- **必须先执行** `./scripts/setup_venv.sh`；`run_callmacd_once.sh` 固定使用 `.venv/bin/python3`，未创建 venv 时会报错：`ModuleNotFoundError: No module named 'yaml'`。
-- 从 cron 运行时工作目录为项目根目录，并设置 `PYTHONPATH`。
-- 自选股较多时，单次扫描可能需 **十余分钟**（每只美股间隔约 5 秒），属正常；可看 `log/cron.log` 与 `log/CallMacd.log` 确认进度。
+- 依赖安装：`./scripts/setup_venv.sh`（本机 `python3 -m pip install -r requirement.txt`，不建 venv）。
+- 环境检查：`./scripts/verify_env.sh`（仅核对 `requirement.txt` 中的包是否已安装）。
+- `run_callmacd_once.sh` 与 cron 使用 PATH 中的 `python3`。
+- 自选股较多时，单次扫描可能需 **十余分钟**，可看 `log/cron.log` 与 `log/CallMacd.log` 确认进度。
 
 ### 7. CallMacd 与下单
 

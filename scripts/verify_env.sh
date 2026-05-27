@@ -1,21 +1,13 @@
 #!/usr/bin/env bash
-# Verify project-local Python env (run outside sandbox / on your Mac).
+# Check that every top-level package in requirement.txt is installed (offline).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PY="$ROOT/.venv/bin/python3"
+PY="$(command -v python3 || true)"
 
-if [ ! -x "$PY" ]; then
-  echo "FAIL: $PY missing — run: $ROOT/scripts/setup_venv.sh" >&2
+if [ -z "$PY" ]; then
+  echo "FAIL: python3 not found in PATH" >&2
   exit 1
 fi
 
-echo "python: $PY"
-"$PY" --version
-"$PY" -c "
-import yaml, longport, lark_oapi, pandas
-from config import config
-print('imports ok')
-print('strategy:', config['strategy']['name'])
-print('log_path:', config['log_path'])
-"
-echo "OK: local venv is ready at $ROOT/.venv"
+echo "python: $PY ($("$PY" --version))"
+exec "$PY" "$ROOT/scripts/check_requirements.py"

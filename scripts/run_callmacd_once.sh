@@ -5,9 +5,9 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 mkdir -p "$ROOT/log"
 
-PY="$ROOT/.venv/bin/python3"
-if [ ! -x "$PY" ]; then
-  echo "error: $PY not found. Run: $ROOT/scripts/setup_venv.sh" >&2
+PY="$(command -v python3 || true)"
+if [ -z "$PY" ]; then
+  echo "error: python3 not found. Run: $ROOT/scripts/setup_venv.sh" >&2
   exit 1
 fi
 
